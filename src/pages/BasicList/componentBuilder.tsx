@@ -1,4 +1,5 @@
 import { Button, Space, Tag } from 'antd';
+import type { ColumnType } from 'antd/lib/table/interface';
 import moment from 'moment';
 
 export const actionsBuilder = (actions: BasicPageDataApi.Action[]) => {
@@ -36,5 +37,7 @@ export const columnsBuilder = (tableColumn: BasicPageDataApi.TableColumn[]) => {
     }
     columns.push(column);
   });
+  const idColumn: ColumnType<unknown> = { title: 'ID', key: 'id', dataIndex: 'id' };
+  columns.unshift(idColumn as any);
   return columns;
 };
