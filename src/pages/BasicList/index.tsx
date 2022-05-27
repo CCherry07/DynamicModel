@@ -1,101 +1,44 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Tag, Space, Card } from 'antd';
+import { Table, Card } from 'antd';
+import { useEffect, useState } from 'react';
 
 import { useRequest } from 'umi';
 
-import type { ColumnsType } from 'antd/lib/table';
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
+interface pageConfig {
+  page: number;
+  per_page: number;
 }
 export default () => {
-  const initDate = useRequest('https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd');
-  console.log(initDate);
+  const [pageConfig, setPageConfig] = useState<pageConfig>({ page: 1, per_page: 10 });
+  const url = `https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}`;
+  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.Data }>(url);
 
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
-    },
-  ];
-  const data: DataType[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
-
+  useEffect(() => {
+    run();
+  }, [pageConfig]);
+  const handlePageConfig = (page: number, pageSize: number): void =>
+    setPageConfig({ page, per_page: pageSize });
   return (
     <PageContainer>
       <Card>
         <SearchLayout />
         <BeforeTableLayout />
-        <Table columns={columns} dataSource={data} />
+        <Table
+          loading={loading}
+          pagination={{
+            total: data?.meta.total,
+            current: data?.meta.page,
+            pageSize: data?.meta.per_page,
+            onChange: handlePageConfig,
+          }}
+          columns={data?.layout?.tableColumn.filter((item) => {
+            return item.hideInColumn !== true;
+          })}
+          dataSource={data?.dataSource}
+        />
         <AfterTableLayout />
       </Card>
     </PageContainer>
