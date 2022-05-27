@@ -57,12 +57,12 @@ declare module BasicPageDataApi {
     title: string;
     dataIndex: string;
     key: string;
-    type: string;
-    data: Datum[];
+    type?: string;
+    data?: Datum[];
     hideInColumn?: boolean;
     sorter?: boolean;
-    mode: string;
-    actions: Action[];
+    mode?: string;
+    actions?: Action[];
   }
 
   export interface TableToolBar {

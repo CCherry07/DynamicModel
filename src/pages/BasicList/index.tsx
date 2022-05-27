@@ -15,7 +15,6 @@ export default () => {
   const [pageConfig, setPageConfig] = useState<pageConfig>({ page: 1, per_page: 10 });
   const url = `https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}`;
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.Data }>(url);
-
   useEffect(() => {
     run();
   }, [pageConfig, run]);
@@ -34,9 +33,9 @@ export default () => {
             pageSize: data?.meta.per_page,
             onChange: handlePageConfig,
           }}
-          columns={data?.layout?.tableColumn.filter((item) => {
-            return item.hideInColumn !== true;
-          })}
+          columns={[{ title: 'ID', key: 'id', dataIndex: 'id' }].concat(
+            data?.layout?.tableColumn.filter((item) => item.hideInColumn !== true) || [],
+          )}
           dataSource={data?.dataSource}
         />
         <AfterTableLayout />
