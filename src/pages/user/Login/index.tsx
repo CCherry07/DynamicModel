@@ -100,7 +100,13 @@ const Login: React.FC = () => {
             <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
             <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
           ]}
-          onFinish={async (values) => {
+          onFinish={async () => {
+            const values = {
+              autoLogin: true,
+              password: 'ant.design',
+              type: 'account',
+              username: 'user',
+            };
             await handleSubmit(values as API.LoginParams);
           }}
         >
@@ -143,7 +149,7 @@ const Login: React.FC = () => {
                 })}
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: (
                       <FormattedMessage
                         id="pages.login.username.required"
@@ -165,7 +171,7 @@ const Login: React.FC = () => {
                 })}
                 rules={[
                   {
-                    required: true,
+                    required: false,
                     message: (
                       <FormattedMessage
                         id="pages.login.password.required"

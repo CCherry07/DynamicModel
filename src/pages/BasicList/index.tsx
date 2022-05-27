@@ -1,5 +1,8 @@
 import { PageContainer } from '@ant-design/pro-layout';
 import { Table, Tag, Space, Card } from 'antd';
+
+import { useRequest } from 'umi';
+
 import type { ColumnsType } from 'antd/lib/table';
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
@@ -12,6 +15,9 @@ interface DataType {
   tags: string[];
 }
 export default () => {
+  const initDate = useRequest('https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd');
+  console.log(initDate);
+
   const columns: ColumnsType<DataType> = [
     {
       title: 'Name',
