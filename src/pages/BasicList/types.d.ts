@@ -48,12 +48,13 @@ declare module BasicPageDataApi {
     component: string;
     text: string;
     type: string;
-    action: string;
-    uri: string;
-    method: string;
+    action?: string;
+    uri?: string;
+    method?: string;
   }
 
   export interface TableColumn {
+    render: (value: any) => string | ReactNode;
     title: string;
     dataIndex: string;
     key: string;
@@ -63,6 +64,7 @@ declare module BasicPageDataApi {
     sorter?: boolean;
     mode?: string;
     actions?: Action[];
+    [key in string]: any;
   }
 
   export interface TableToolBar {
