@@ -1,6 +1,9 @@
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Tag, Space } from 'antd';
+import { Table, Tag, Space, Card } from 'antd';
 import type { ColumnsType } from 'antd/lib/table';
+import { AfterTableLayout } from './components/AfterTableLayout';
+import { BeforeTableLayout } from './components/BeforeTableLayout';
+import { SearchLayout } from './components/SearchLayout';
 interface DataType {
   key: string;
   name: string;
@@ -8,13 +11,13 @@ interface DataType {
   address: string;
   tags: string[];
 }
-export default ()=>{
+export default () => {
   const columns: ColumnsType<DataType> = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a>{text}</a>,
+      render: (text) => <a>{text}</a>,
     },
     {
       title: 'Age',
@@ -32,7 +35,7 @@ export default ()=>{
       dataIndex: 'tags',
       render: (_, { tags }) => (
         <>
-          {tags.map(tag => {
+          {tags.map((tag) => {
             let color = tag.length > 5 ? 'geekblue' : 'green';
             if (tag === 'loser') {
               color = 'volcano';
@@ -80,9 +83,15 @@ export default ()=>{
       tags: ['cool', 'teacher'],
     },
   ];
+
   return (
     <PageContainer>
-      <Table columns={columns} dataSource={data} />
+      <Card>
+        <SearchLayout />
+        <BeforeTableLayout />
+        <Table columns={columns} dataSource={data} />
+        <AfterTableLayout />
+      </Card>
     </PageContainer>
-  )
-}
+  );
+};
