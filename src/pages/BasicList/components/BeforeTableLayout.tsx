@@ -1,5 +1,5 @@
 import { Col, Row, Space } from 'antd';
-import { actionsBuilder } from '../component';
+import { actionsBuilder } from '../componentBuilder';
 export const BeforeTableLayout = ({ actions }: { actions: BasicPageDataApi.Action[] }) => {
   return (
     <Row style={{ marginBottom: '1.5rem' }}>

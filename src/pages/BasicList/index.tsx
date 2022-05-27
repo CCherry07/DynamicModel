@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Card, Switch, Space } from 'antd';
-import moment from 'moment';
+import { Table, Card } from 'antd';
 
 import { useRequest } from 'umi';
 
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { actionsBuilder } from './component';
+
+import { columnsBuilder } from './componentBuilder';
+
 interface pageConfig {
   page: number;
   per_page: number;
@@ -25,45 +25,6 @@ export default () => {
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
-  const columnsBuilder = () => {
-    const columns: BasicPageDataApi.TableColumn[] = [];
-    (data?.layout.tableColumn || []).forEach((column) => {
-      if (column.hideInColumn === true) return;
-      switch (column.type) {
-        case 'datetime':
-          column.render = (value: any) => {
-            return moment(value).format('YYYY-MM-DD HH-mm-ss');
-          };
-          break;
-        case 'switch':
-          column.render = (value: any) => {
-            // const checked = column.data?.some(item=>item.value === value)
-            let checked: boolean = false;
-            if (value === 1) {
-              checked = true;
-            }
-            return (
-              <Switch
-                checkedChildren={<CheckOutlined />}
-                unCheckedChildren={<CloseOutlined />}
-                checked={checked}
-              />
-            );
-          };
-          break;
-        case 'actions':
-          column.render = () => {
-            return <Space> {actionsBuilder(column.actions || [])} </Space>;
-          };
-          break;
-        default:
-          break;
-      }
-      columns.push(column);
-    });
-    return columns;
-  };
-
   return (
     <PageContainer>
       <Card>
@@ -77,7 +38,7 @@ export default () => {
             pageSize: data?.meta.per_page,
             onChange: handlePageConfig,
           }}
-          columns={columnsBuilder()}
+          columns={columnsBuilder(data?.layout.tableColumn || [])}
           dataSource={data?.dataSource}
         />
         <AfterTableLayout />
