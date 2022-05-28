@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Card } from 'antd';
+import { Table, Card, Button } from 'antd';
 
 import { useRequest } from 'umi';
+
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
 
 import { columnsBuilder } from './componentBuilder';
+import { Modal } from '@/components/Modal';
 
 export interface PageConfig {
   page: number;
@@ -25,9 +27,10 @@ export default () => {
   });
   const [isAsc, changeIsAsc] = useState(false);
   const url = `https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
-
+  const [modalDataUrl, setModalDataUrl] = useState('');
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.Data }>(url);
 
+  const [visible, setVisible] = useState(false);
   const handleChange = (...args: any[]) => {
     const { field } = args[2];
     changeIsAsc(field && !isAsc);
@@ -42,13 +45,31 @@ export default () => {
   useEffect(() => {
     run();
   }, [pageConfig]);
+
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
+  const handleModalOK = () => {
+    setVisible(false);
+  };
+  const handleModalCancel = () => {
+    setVisible(false);
+  };
+  // 'https://public-api-v2.aspirantzhang.com/api/admins/206?X-API-KEY=antd'
   return (
     <PageContainer>
       <Card>
         <SearchLayout />
+        <Button
+          onClick={() => {
+            setModalDataUrl(
+              'https://public-api-v2.aspirantzhang.com/api/admins/206?X-API-KEY=antd',
+            );
+            setVisible(true);
+          }}
+        >
+          edit
+        </Button>
         <BeforeTableLayout actions={data?.layout.tableToolBar || []} />
         <Table
           rowKey={'id'}
@@ -65,6 +86,13 @@ export default () => {
         />
         <AfterTableLayout />
       </Card>
+      <Modal
+        title="basic"
+        modalDataUrl={modalDataUrl}
+        handleCancel={handleModalCancel}
+        handleOK={handleModalOK}
+        visible={visible}
+      />
     </PageContainer>
   );
 };
