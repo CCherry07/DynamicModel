@@ -48,7 +48,7 @@ export const Modal = (props: ModalProps) => {
     if (!props.visible) return;
     form.resetFields();
     run();
-  }, [props.visible, run]);
+  }, [props.visible, run, form]);
 
   const onFinish = (values: RequestParams) => {
     values.create_time = moment(values.create_time).format();
@@ -97,7 +97,7 @@ export const Modal = (props: ModalProps) => {
   useEffect(() => {
     if (!data) return;
     form.setFieldsValue(setFieldsAdaptor(data));
-  }, [data]);
+  }, [data, form]);
   return (
     <div>
       <AntdModal
