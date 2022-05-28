@@ -56,6 +56,7 @@ export const Modal = (props: ModalProps) => {
       <AntdModal
         title={data?.page.title}
         visible={props.visible}
+        maskClosable={false}
         onOk={handleOK}
         onCancel={handleCancel}
         footer={actionsBuilder(data?.layout.actions[0].data || [])}
