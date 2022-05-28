@@ -35,7 +35,7 @@ export default () => {
     const { field } = args[2];
     changeIsAsc(field && !isAsc);
     const orderConfig: Partial<PageConfig> = {
-      order: isAsc ? 'asc' : 'desc',
+      order: isAsc ? 'desc' : 'asc',
       sort: field,
     };
     setPageConfig((state) => {
@@ -60,6 +60,16 @@ export default () => {
     <PageContainer>
       <Card>
         <SearchLayout />
+        <Button
+          onClick={() => {
+            setModalDataUrl(
+              'https://public-api-v2.aspirantzhang.com/api/admins/add?X-API-KEY=antd',
+            );
+            setVisible(true);
+          }}
+        >
+          add
+        </Button>
         <Button
           onClick={() => {
             setModalDataUrl(

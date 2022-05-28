@@ -192,6 +192,7 @@ declare module PageApi {
     dataIndex: string;
     key: string;
     type: string;
+    disabled: boolean;
     data: Datum2[];
   }
 
@@ -221,9 +222,20 @@ declare module PageApi {
     actions: Action[];
   }
 
+  export interface DataSource {
+    id: number;
+    username: string;
+    display_name: string;
+    create_time: Date;
+    update_time: Date;
+    status: number;
+    groups: number[];
+  }
+
   export interface Data {
     page: Page;
     layout: Layout;
+    dataSource: DataSource;
   }
 
   export interface RootObject {
