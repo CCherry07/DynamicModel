@@ -102,6 +102,7 @@ export default () => {
         handleCancel={handleModalCancel}
         handleOK={handleModalOK}
         visible={visible}
+        setVisible={setVisible}
       />
     </PageContainer>
   );

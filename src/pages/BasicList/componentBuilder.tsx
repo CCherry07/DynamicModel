@@ -1,11 +1,19 @@
 import { Button, Space, Tag } from 'antd';
+import type { ButtonType } from 'antd/lib/button';
 import type { ColumnType } from 'antd/lib/table/interface';
 import moment from 'moment';
-export const actionsBuilder = (actions: BasicPageDataApi.Action[]) => {
+export const actionsBuilder = (
+  actions: BasicPageDataApi.Action[],
+  actionHandler?: (actionInfo: BasicPageDataApi.Action) => void,
+) => {
   return actions.map((action) => {
     if (action.component === 'button') {
       return (
-        <Button key={action.text} type={action.type as any}>
+        <Button
+          key={action.text}
+          type={action.type as ButtonType}
+          onClick={() => actionHandler?.(action)}
+        >
           {action.text}
         </Button>
       );
@@ -36,7 +44,7 @@ export const columnsBuilder = (tableColumn: BasicPageDataApi.TableColumn[]) => {
         break;
       case 'actions':
         column.render = () => {
-          return <Space> {actionsBuilder(column.actions || [])} </Space>;
+          return <Space> {actionsBuilder(column.actions || [], undefined)} </Space>;
         };
         break;
       default:
