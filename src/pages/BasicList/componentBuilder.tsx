@@ -1,11 +1,14 @@
 import { Button, Space, Tag } from 'antd';
 import type { ColumnType } from 'antd/lib/table/interface';
 import moment from 'moment';
-
 export const actionsBuilder = (actions: BasicPageDataApi.Action[]) => {
   return actions.map((action) => {
     if (action.component === 'button') {
-      return <Button type={action.type as any}>{action.text}</Button>;
+      return (
+        <Button key={action.text} type={action.type as any}>
+          {action.text}
+        </Button>
+      );
     }
     return null;
   });
@@ -24,7 +27,11 @@ export const columnsBuilder = (tableColumn: BasicPageDataApi.TableColumn[]) => {
       case 'switch':
         column.render = (value: any) => {
           const option = column.data?.find((item) => item.value === value);
-          return <Tag color={value ? 'blue' : 'red'}>{option?.title} </Tag>;
+          return (
+            <Tag key={value.id} color={value ? 'blue' : 'red'}>
+              {option?.title}{' '}
+            </Tag>
+          );
         };
         break;
       case 'actions':
@@ -37,7 +44,14 @@ export const columnsBuilder = (tableColumn: BasicPageDataApi.TableColumn[]) => {
     }
     columns.push(column);
   });
-  const idColumn: ColumnType<unknown> = { title: 'ID', key: 'id', dataIndex: 'id' };
+  const idColumn: ColumnType<BasicPageDataApi.DataSource> = {
+    title: 'ID',
+    key: 'id',
+    dataIndex: 'id',
+    sorter: (rowA, rowB) => {
+      return rowA.id - rowB.id;
+    },
+  };
   columns.unshift(idColumn as any);
   return columns;
 };
