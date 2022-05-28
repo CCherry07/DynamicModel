@@ -6,7 +6,7 @@ export const modalFormBuilder = (modalDate: PageApi.Datum[]): ReactNode => {
 
   return modalDate.map((tab) => {
     return (
-      <Form.Item label={tab.title} name={tab.title}>
+      <Form.Item key={tab.title} label={tab.title} name={tab.title}>
         <Input />
       </Form.Item>
     );

@@ -44,7 +44,7 @@ export default () => {
   };
   useEffect(() => {
     run();
-  }, [pageConfig]);
+  }, [pageConfig, run]);
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });

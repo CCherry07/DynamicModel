@@ -17,7 +17,7 @@ export const Modal = (props: ModalProps) => {
   useEffect(() => {
     if (!props.visible) return;
     run();
-  }, [props.visible]);
+  }, [props.visible, run]);
   return (
     <div>
       <AntdModal
