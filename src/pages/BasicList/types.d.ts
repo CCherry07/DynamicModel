@@ -16,6 +16,7 @@ declare module BasicPageDataApi {
     sorter?: boolean;
     mode?: string;
     actions?: Action[];
+    disabled?: boolean;
     [key in string]: any;
   };
 

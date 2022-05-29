@@ -22,13 +22,16 @@ interface RequestParams extends BasicPageDataApi.DataSource {
 }
 export const Modal = (props: ModalProps) => {
   const { handleOK, handleCancel, modalDataUrl, setVisible } = props;
+  const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const [form] = useForm();
-  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(modalDataUrl);
+  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(
+    baseUrl + modalDataUrl + '?X-API-KEY=antd',
+  );
   const request = useRequest(
     (config: RequestParams) => {
       const { uri, method, ...formData } = config;
       return {
-        url: `https://public-api-v2.aspirantzhang.com${uri}`,
+        url: baseUrl + uri,
         method,
         data: formData,
       };

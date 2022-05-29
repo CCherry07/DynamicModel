@@ -26,7 +26,8 @@ export default () => {
     order: 'asc',
   });
   const [isAsc, changeIsAsc] = useState(false);
-  const url = `https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
+  const baseUrl = 'https://public-api-v2.aspirantzhang.com';
+  const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
 
@@ -80,7 +81,11 @@ export default () => {
         >
           edit
         </Button>
-        <BeforeTableLayout actions={data?.layout.tableToolBar || []} />
+        <BeforeTableLayout
+          setModalDataUrl={setModalDataUrl}
+          setVisible={setVisible}
+          actions={data?.layout.tableToolBar || []}
+        />
         <Table
           rowKey={'id'}
           loading={loading}
@@ -90,7 +95,7 @@ export default () => {
             pageSize: data?.meta.per_page,
             onChange: handlePageConfig,
           }}
-          columns={columnsBuilder(data?.layout.tableColumn || [])}
+          columns={columnsBuilder(data?.layout.tableColumn || [], undefined)}
           onChange={handleChange}
           dataSource={data?.dataSource}
         />

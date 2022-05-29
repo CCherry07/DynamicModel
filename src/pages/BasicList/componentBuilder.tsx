@@ -4,7 +4,7 @@ import type { ColumnType } from 'antd/lib/table/interface';
 import moment from 'moment';
 export const actionsBuilder = (
   actions: BasicPageDataApi.Action[],
-  actionHandler?: (actionInfo: BasicPageDataApi.Action) => void,
+  actionsHandler?: (actionInfo: BasicPageDataApi.Action) => void,
 ) => {
   return actions.map((action) => {
     if (action.component === 'button') {
@@ -12,7 +12,7 @@ export const actionsBuilder = (
         <Button
           key={action.text}
           type={action.type as ButtonType}
-          onClick={() => actionHandler?.(action)}
+          onClick={() => actionsHandler?.(action)}
         >
           {action.text}
         </Button>
@@ -22,7 +22,10 @@ export const actionsBuilder = (
   });
 };
 
-export const columnsBuilder = (tableColumn: BasicPageDataApi.Field[]) => {
+export const columnsBuilder = (
+  tableColumn: BasicPageDataApi.Field[],
+  actionsHandler?: (actionInfo: BasicPageDataApi.Action) => void,
+) => {
   const columns: BasicPageDataApi.Field[] = [];
   tableColumn.forEach((column) => {
     if (column.hideInColumn === true) return;
@@ -44,7 +47,9 @@ export const columnsBuilder = (tableColumn: BasicPageDataApi.Field[]) => {
         break;
       case 'actions':
         column.render = () => {
-          return <Space> {actionsBuilder(column.actions || [], undefined)} </Space>;
+          return (
+            <Space> {actionsBuilder(column.actions || [], actionsHandler || undefined)} </Space>
+          );
         };
         break;
       default:

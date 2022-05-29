@@ -1,6 +1,7 @@
 import moment from 'moment';
 import type React from 'react';
-type handleFinishFormType = <D>(values: D) => D;
+import type { handleFinishFormType } from './types';
+// create time change to moment,format
 export const finishFormAdaptor: handleFinishFormType = (values) => {
   const finishAdaptored = {
     ...values,
