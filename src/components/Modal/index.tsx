@@ -36,7 +36,6 @@ export const Modal = (props: ModalProps) => {
     },
     {
       manual: true,
-      throwOnError: true,
     },
   );
   //表单默认值
