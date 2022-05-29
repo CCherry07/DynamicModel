@@ -25,7 +25,12 @@ export const Modal = (props: ModalProps) => {
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const initUrl = baseUrl + modalDataUrl + '?X-API-KEY=antd';
   const [form] = useForm();
-  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, { manual: true });
+  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
+    manual: true,
+    onError() {
+      setVisible(false);
+    },
+  });
   const request = useRequest(
     (config: RequestParams) => {
       const { uri, method, ...formData } = config;
