@@ -49,6 +49,22 @@ export default () => {
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
+
+  const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: unknown) => {
+    switch (actionInfo.action) {
+      case 'modal':
+        const { id } = row as BasicPageDataApi.DataSource;
+        const uri = actionInfo.uri?.replace(':id', String(id));
+        setModalDataUrl(uri || '');
+        setVisible(true);
+        break;
+      case 'cancel':
+        setVisible(false);
+      default:
+        break;
+    }
+  };
+
   return (
     <PageContainer>
       <Card>
@@ -67,7 +83,7 @@ export default () => {
             pageSize: data?.meta.per_page,
             onChange: handlePageConfig,
           }}
-          columns={columnsBuilder(data?.layout.tableColumn || [], undefined)}
+          columns={columnsBuilder(data?.layout.tableColumn || [], actionsHandler)}
           onChange={handleChange}
           dataSource={data?.dataSource}
         />

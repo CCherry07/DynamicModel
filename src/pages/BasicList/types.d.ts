@@ -6,7 +6,7 @@ declare module BasicPageDataApi {
     trash: boolean;
   };
   type Field = {
-    render: (value: any) => string | ReactNode;
+    render: (...args: any[]) => string | ReactNode;
     title: string;
     dataIndex: string;
     key: string;
