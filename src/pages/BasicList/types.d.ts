@@ -1,21 +1,11 @@
 declare module BasicPageDataApi {
-  export interface Page {
+  type Page = {
     title: string;
     type: string;
     searchBar: boolean;
     trash: boolean;
-  }
-
-  export interface Action {
-    component: string;
-    text: string;
-    type: string;
-    action?: string;
-    uri?: string;
-    method?: string;
-  }
-
-  export interface Field {
+  };
+  type Field = {
     render: (value: any) => string | ReactNode;
     title: string;
     dataIndex: string;
@@ -27,16 +17,16 @@ declare module BasicPageDataApi {
     mode?: string;
     actions?: Action[];
     [key in string]: any;
-  }
+  };
 
-  export interface ActionType {
+  type ActionType = {
     component: string;
     text: string;
     type: string;
     action: string;
-  }
+  };
 
-  export interface Action {
+  type Action = {
     component: string;
     text: string;
     type: string;
@@ -44,9 +34,9 @@ declare module BasicPageDataApi {
     uri?: string;
     method?: string;
     data?: ActionType[];
-  }
+  };
 
-  export interface Pivot {
+  type Pivot = {
     id: number;
     admin_id: number;
     group_id: number;
@@ -54,9 +44,9 @@ declare module BasicPageDataApi {
     update_time: string;
     delete_time?: any;
     status: number;
-  }
+  };
 
-  export interface Group {
+  type Group = {
     id: number;
     parent_id: number;
     name: string;
@@ -65,9 +55,9 @@ declare module BasicPageDataApi {
     delete_time?: any;
     status: number;
     pivot: Pivot;
-  }
+  };
 
-  export interface DataSource {
+  type DataSource = {
     id: number;
     username: string;
     display_name: string;
@@ -75,42 +65,42 @@ declare module BasicPageDataApi {
     delete_time: Date | string;
     status: number;
     groups: Group[];
-  }
+  };
 
-  export interface Meta {
+  type Meta = {
     total: number;
     per_page: number;
     page: number;
-  }
-  export interface ListLayout {
+  };
+  type ListLayout = {
     tableColumn: Field[];
     tableToolBar: Action[];
     batchToolBar: Action[];
-  }
-  export interface Tab {
+  };
+  type Tab = {
     name: string;
     title: string;
     data: Field[];
-  }
-  export interface PageLayout {
+  };
+  type PageLayout = {
     tabs: Tab[];
     actions: Action[];
-  }
+  };
 
-  export interface ListData {
+  type ListData = {
     page: Page;
     layout: ListLayout;
     dataSource: DataSource[];
     meta: Meta;
-  }
-  export interface PageData {
+  };
+  type PageData = {
     page: Page;
     layout: PageLayout;
     dataSource: DataSource;
-  }
-  export interface Root {
+  };
+  type Root = {
     success: boolean;
     message: string;
     data: ListData | PageData;
-  }
+  };
 }

@@ -83,7 +83,7 @@ export const Modal = (props: ModalProps) => {
         maskClosable={false}
         onOk={handleOK}
         onCancel={handleCancel}
-        footer={actionsBuilder(data?.layout.actions[0].data || [], actionHandler)}
+        footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler)}
       >
         <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
           {modalFormBuilder(data?.layout.tabs[0].data || [])}
