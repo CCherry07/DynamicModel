@@ -9,8 +9,6 @@ interface ModalProps {
   title: string;
   visible: boolean;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOK: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-  handleCancel: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   modalDataUrl: string;
   handleShowModalData?: (data: any) => void;
 }
@@ -21,7 +19,7 @@ interface RequestParams extends BasicPageDataApi.DataSource {
   'X-API-KEY'?: 'antd';
 }
 export const Modal = (props: ModalProps) => {
-  const { handleOK, handleCancel, modalDataUrl, setVisible } = props;
+  const { modalDataUrl, setVisible } = props;
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const [form] = useForm();
   const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(
@@ -38,6 +36,7 @@ export const Modal = (props: ModalProps) => {
     },
     {
       manual: true,
+      throwOnError: true,
     },
   );
   //表单默认值
@@ -84,8 +83,6 @@ export const Modal = (props: ModalProps) => {
         title={data?.page.title}
         visible={props.visible}
         maskClosable={false}
-        onOk={handleOK}
-        onCancel={handleCancel}
         footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler)}
       >
         <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>

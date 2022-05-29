@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Card, Button } from 'antd';
+import { Table, Card } from 'antd';
 
 import { useRequest } from 'umi';
 
@@ -49,38 +49,10 @@ export default () => {
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
-
-  const handleModalOK = () => {
-    setVisible(false);
-  };
-  const handleModalCancel = () => {
-    setVisible(false);
-  };
-  // 'https://public-api-v2.aspirantzhang.com/api/admins/206?X-API-KEY=antd'
   return (
     <PageContainer>
       <Card>
         <SearchLayout />
-        <Button
-          onClick={() => {
-            setModalDataUrl(
-              'https://public-api-v2.aspirantzhang.com/api/admins/add?X-API-KEY=antd',
-            );
-            setVisible(true);
-          }}
-        >
-          add
-        </Button>
-        <Button
-          onClick={() => {
-            setModalDataUrl(
-              'https://public-api-v2.aspirantzhang.com/api/admins/206?X-API-KEY=antd',
-            );
-            setVisible(true);
-          }}
-        >
-          edit
-        </Button>
         <BeforeTableLayout
           setModalDataUrl={setModalDataUrl}
           setVisible={setVisible}
@@ -101,14 +73,7 @@ export default () => {
         />
         <AfterTableLayout />
       </Card>
-      <Modal
-        title="basic"
-        modalDataUrl={modalDataUrl}
-        handleCancel={handleModalCancel}
-        handleOK={handleModalOK}
-        visible={visible}
-        setVisible={setVisible}
-      />
+      <Modal title="basic" modalDataUrl={modalDataUrl} visible={visible} setVisible={setVisible} />
     </PageContainer>
   );
 };
