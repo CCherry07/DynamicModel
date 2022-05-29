@@ -105,7 +105,7 @@ const Login: React.FC = () => {
               autoLogin: true,
               password: 'ant.design',
               type: 'account',
-              username: 'user',
+              username: 'admin',
             };
             await handleSubmit(values as API.LoginParams);
           }}
