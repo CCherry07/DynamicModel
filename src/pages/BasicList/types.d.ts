@@ -225,9 +225,9 @@ declare module PageApi {
   export interface DataSource {
     id: number;
     username: string;
-    display_name: string;
-    create_time: Date;
-    update_time: Date;
+    display_name?: string;
+    create_time: Date | string;
+    update_time: Date | string;
     status: number;
     groups: number[];
   }

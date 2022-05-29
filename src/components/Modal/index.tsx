@@ -14,16 +14,10 @@ interface ModalProps {
   modalDataUrl: string;
   handleShowModalData?: (data: any) => void;
 }
-interface RequestParams {
+interface RequestParams extends PageApi.DataSource {
   uri?: string;
   method: string;
-  username: string;
   password: string;
-  display_name?: string;
-  groups?: number[];
-  create_time: string;
-  update_time: string;
-  status: boolean;
   'X-API-KEY'?: 'antd';
 }
 export const Modal = (props: ModalProps) => {
@@ -43,6 +37,7 @@ export const Modal = (props: ModalProps) => {
       manual: true,
     },
   );
+  //表单默认值
   const [initialValues, setInitialValues] = useState<any>({ status: true });
   useEffect(() => {
     if (!props.visible) return;
@@ -51,9 +46,17 @@ export const Modal = (props: ModalProps) => {
   }, [props.visible, run, form]);
 
   const onFinish = (values: RequestParams) => {
-    values.create_time = moment(values.create_time).format();
-    values.update_time = moment(values.update_time).format();
-    request.run({ ...values, 'X-API-KEY': 'antd' }).then(() => setVisible(false));
+    const finishAdaptored = {
+      ...values,
+      'X-API-KEY': 'antd',
+    } as const;
+    Object.keys(finishAdaptored).forEach((key) => {
+      if (moment.isMoment(finishAdaptored[key])) {
+        finishAdaptored[key] = finishAdaptored[key].format();
+        finishAdaptored[key] = finishAdaptored[key].format();
+      }
+    });
+    request.run(finishAdaptored).then(() => setVisible(false));
   };
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
