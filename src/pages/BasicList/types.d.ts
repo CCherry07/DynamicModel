@@ -6,44 +6,6 @@ declare module BasicPageDataApi {
     trash: boolean;
   }
 
-  export interface Child2 {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: number;
-    title: string;
-    depth: number;
-  }
-
-  export interface Child {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: number;
-    title: string;
-    depth: number;
-    children: Child2[];
-  }
-
-  export interface Datum {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: any;
-    title: string;
-    depth: number;
-    children: Child[];
-  }
-
   export interface Action {
     component: string;
     text: string;
@@ -53,7 +15,7 @@ declare module BasicPageDataApi {
     method?: string;
   }
 
-  export interface TableColumn {
+  export interface Field {
     render: (value: any) => string | ReactNode;
     title: string;
     dataIndex: string;
@@ -67,28 +29,21 @@ declare module BasicPageDataApi {
     [key in string]: any;
   }
 
-  export interface TableToolBar {
+  export interface ActionType {
     component: string;
     text: string;
     type: string;
     action: string;
-    id: string;
-    uri: string;
   }
 
-  export interface BatchToolBar {
+  export interface Action {
     component: string;
     text: string;
     type: string;
     action: string;
-    uri: string;
-    method: string;
-  }
-
-  export interface Layout {
-    tableColumn: TableColumn[];
-    tableToolBar: TableToolBar[];
-    batchToolBar: BatchToolBar[];
+    uri?: string;
+    method?: string;
+    data?: ActionType[];
   }
 
   export interface Pivot {
@@ -116,8 +71,8 @@ declare module BasicPageDataApi {
     id: number;
     username: string;
     display_name: string;
-    create_time: Date;
-    delete_time?: any;
+    create_time: Date | string;
+    delete_time: Date | string;
     status: number;
     groups: Group[];
   }
@@ -127,120 +82,35 @@ declare module BasicPageDataApi {
     per_page: number;
     page: number;
   }
-
-  export interface Data {
-    page: Page;
-    layout: Layout;
-    dataSource: DataSource[];
-    meta: Meta;
+  export interface ListLayout {
+    tableColumn: Field[];
+    tableToolBar: Action[];
+    batchToolBar: Action[];
   }
-
-  export interface RootObject {
-    success: boolean;
-    message: string;
-    data: Data;
-  }
-}
-
-// modal
-declare module PageApi {
-  export interface Page {
-    title: string;
-    type: string;
-  }
-
-  export interface Child2 {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: number;
-    title: string;
-    depth: number;
-  }
-
-  export interface Child {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: number;
-    title: string;
-    depth: number;
-    children: Child2[];
-  }
-
-  export interface Datum2 {
-    id: number;
-    parent_id: number;
-    name: string;
-    create_time: Date;
-    delete_time?: any;
-    status: number;
-    value: number;
-    title: string;
-    depth: number;
-    children: Child[];
-  }
-
-  export interface Datum {
-    title: string;
-    dataIndex: string;
-    key: string;
-    type: string;
-    disabled: boolean;
-    data: Datum2[];
-  }
-
   export interface Tab {
     name: string;
     title: string;
-    data: Datum[];
+    data: Field[];
   }
-
-  export interface Datum3 {
-    component: string;
-    text: string;
-    type: string;
-    action: string;
-    uri: string;
-    method: string;
-  }
-
-  export interface Action {
-    name: string;
-    title: string;
-    data: Datum3[];
-  }
-
-  export interface Layout {
+  export interface PageLayout {
     tabs: Tab[];
     actions: Action[];
   }
 
-  export interface DataSource {
-    id: number;
-    username: string;
-    display_name?: string;
-    create_time: Date | string;
-    update_time: Date | string;
-    status: number;
-    groups: number[];
-  }
-
-  export interface Data {
+  export interface ListData {
     page: Page;
-    layout: Layout;
+    layout: ListLayout;
+    dataSource: DataSource[];
+    meta: Meta;
+  }
+  export interface PageData {
+    page: Page;
+    layout: PageLayout;
     dataSource: DataSource;
   }
-
-  export interface RootObject {
+  export interface Root {
     success: boolean;
     message: string;
-    data: Data;
+    data: ListData | PageData;
   }
 }

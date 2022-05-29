@@ -28,7 +28,7 @@ export default () => {
   const [isAsc, changeIsAsc] = useState(false);
   const url = `https://public-api-v2.aspirantzhang.com/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
-  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.Data }>(url);
+  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
 
   const [visible, setVisible] = useState(false);
   const handleChange = (...args: any[]) => {

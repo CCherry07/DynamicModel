@@ -16,7 +16,7 @@ export const finishFormAdaptor: handleFinishFormType = (values) => {
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
 export const setFieldsAdaptor = (
-  data: PageApi.Data,
+  data: BasicPageDataApi.PageData,
   setInitialValues: React.Dispatch<React.SetStateAction<any>>,
 ) => {
   if (!data.layout.tabs) return {};

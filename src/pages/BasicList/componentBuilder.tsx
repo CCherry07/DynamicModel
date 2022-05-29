@@ -22,8 +22,8 @@ export const actionsBuilder = (
   });
 };
 
-export const columnsBuilder = (tableColumn: BasicPageDataApi.TableColumn[]) => {
-  const columns: BasicPageDataApi.TableColumn[] = [];
+export const columnsBuilder = (tableColumn: BasicPageDataApi.Field[]) => {
+  const columns: BasicPageDataApi.Field[] = [];
   tableColumn.forEach((column) => {
     if (column.hideInColumn === true) return;
     switch (column.type) {

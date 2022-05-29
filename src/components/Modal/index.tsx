@@ -14,7 +14,7 @@ interface ModalProps {
   modalDataUrl: string;
   handleShowModalData?: (data: any) => void;
 }
-interface RequestParams extends PageApi.DataSource {
+interface RequestParams extends BasicPageDataApi.DataSource {
   uri?: string;
   method: string;
   password: string;
@@ -23,7 +23,7 @@ interface RequestParams extends PageApi.DataSource {
 export const Modal = (props: ModalProps) => {
   const { handleOK, handleCancel, modalDataUrl, setVisible } = props;
   const [form] = useForm();
-  const { data, run } = useRequest<{ data: PageApi.Data }>(modalDataUrl);
+  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(modalDataUrl);
   const request = useRequest(
     (config: RequestParams) => {
       const { uri, method, ...formData } = config;
