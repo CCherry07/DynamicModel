@@ -1,6 +1,6 @@
 import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
 import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
-import { Form, Input, message, Modal as AntdModal } from 'antd';
+import { Form, Input, message, Modal as AntdModal, Spin } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
@@ -105,15 +105,17 @@ export const Modal = (props: ModalProps) => {
         onCancel={handleCancel}
         footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler, request.loading)}
       >
-        <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
-          {modalFormBuilder(data?.layout.tabs[0].data || [])}
-          <Form.Item name="uri" key={'uri'} hidden>
-            <Input />
-          </Form.Item>
-          <Form.Item name="method" key={'method'} hidden>
-            <Input />
-          </Form.Item>
-        </Form>
+        <Spin spinning={request.loading}>
+          <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
+            {modalFormBuilder(data?.layout.tabs[0].data || [])}
+            <Form.Item name="uri" key={'uri'} hidden>
+              <Input />
+            </Form.Item>
+            <Form.Item name="method" key={'method'} hidden>
+              <Input />
+            </Form.Item>
+          </Form>
+        </Spin>
       </AntdModal>
     </div>
   );
