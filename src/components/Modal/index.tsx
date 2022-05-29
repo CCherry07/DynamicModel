@@ -1,7 +1,7 @@
 import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
+import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
 import { Form, Input, Modal as AntdModal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { modalFormBuilder } from './ModalFormBuilder';
@@ -44,35 +44,9 @@ export const Modal = (props: ModalProps) => {
     form.resetFields();
     run();
   }, [props.visible, run, form]);
-
+  //表单提交
   const onFinish = (values: RequestParams) => {
-    const finishAdaptored = {
-      ...values,
-      'X-API-KEY': 'antd',
-    } as const;
-    Object.keys(finishAdaptored).forEach((key) => {
-      if (moment.isMoment(finishAdaptored[key])) {
-        finishAdaptored[key] = moment(finishAdaptored[key]).format();
-      }
-    });
-    request.run(finishAdaptored).then(() => setVisible(false));
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-shadow
-  const setFieldsAdaptor = (data: PageApi.Data) => {
-    if (!data.layout.tabs) return {};
-    const adaptored = { ...(data.dataSource || {}) };
-    data.layout.tabs.forEach(({ data: fields }) => {
-      fields.forEach((field) => {
-        if (field.type === 'datetime') {
-          adaptored[field.key] = moment(adaptored[field.key]);
-          setInitialValues((state: any) => {
-            return { ...state, [field.key]: moment() };
-          });
-        }
-      });
-    });
-    return adaptored;
+    request.run(finishFormAdaptor(values)).then(() => setVisible(false));
   };
 
   const actionHandler = (actionInfo: BasicPageDataApi.Action) => {
@@ -98,7 +72,8 @@ export const Modal = (props: ModalProps) => {
 
   useEffect(() => {
     if (!data) return;
-    form.setFieldsValue(setFieldsAdaptor(data));
+    form.resetFields();
+    form.setFieldsValue(setFieldsAdaptor(data, setInitialValues));
   }, [data, form]);
   return (
     <div>
