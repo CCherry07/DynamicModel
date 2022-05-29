@@ -13,8 +13,8 @@ export const BeforeTableLayout = (props: BeforeTableLayoutProps) => {
         setModalDataUrl(actionInfo?.uri || '');
         setVisible(true);
         break;
-      case 'rest':
-
+      case 'cancel':
+        setVisible(false);
       default:
         break;
     }

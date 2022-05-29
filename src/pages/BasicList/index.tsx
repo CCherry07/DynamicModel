@@ -73,7 +73,14 @@ export default () => {
         />
         <AfterTableLayout />
       </Card>
-      <Modal title="basic" modalDataUrl={modalDataUrl} visible={visible} setVisible={setVisible} />
+      <Modal
+        handleCancel={() => setVisible(false)}
+        handleOK={() => setVisible(false)}
+        title="basic"
+        modalDataUrl={modalDataUrl}
+        visible={visible}
+        setVisible={setVisible}
+      />
     </PageContainer>
   );
 };
