@@ -52,8 +52,7 @@ export const Modal = (props: ModalProps) => {
     } as const;
     Object.keys(finishAdaptored).forEach((key) => {
       if (moment.isMoment(finishAdaptored[key])) {
-        finishAdaptored[key] = finishAdaptored[key].format();
-        finishAdaptored[key] = finishAdaptored[key].format();
+        finishAdaptored[key] = moment(finishAdaptored[key]).format();
       }
     });
     request.run(finishAdaptored).then(() => setVisible(false));
