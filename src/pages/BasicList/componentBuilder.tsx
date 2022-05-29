@@ -5,7 +5,9 @@ import moment from 'moment';
 export const actionsBuilder = (
   actions: BasicPageDataApi.Action[],
   actionsHandler?: (actionInfo: BasicPageDataApi.Action) => void,
+  loading?: boolean,
 ) => {
+  console.log(loading);
   return actions.map((action) => {
     if (action.component === 'button') {
       return (
@@ -13,6 +15,7 @@ export const actionsBuilder = (
           key={action.text}
           type={action.type as ButtonType}
           onClick={() => actionsHandler?.(action)}
+          loading={action.action === 'submit' ? loading : undefined}
         >
           {action.text}
         </Button>

@@ -1,6 +1,6 @@
 import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
 import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
-import { Form, Input, Modal as AntdModal } from 'antd';
+import { Form, Input, message, Modal as AntdModal } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
@@ -42,6 +42,16 @@ export const Modal = (props: ModalProps) => {
     },
     {
       manual: true,
+      onSuccess: (res) => {
+        setVisible(false);
+        message.success({
+          content: res.message,
+          key: 'process',
+        });
+      },
+      formatResult(res: any) {
+        return res;
+      },
     },
   );
   //表单默认值
@@ -53,7 +63,7 @@ export const Modal = (props: ModalProps) => {
   }, [props.visible, run, form]);
   //表单提交
   const onFinish = (values: RequestParams) => {
-    request.run(finishFormAdaptor(values)).then(() => setVisible(false));
+    request.run(finishFormAdaptor(values));
   };
 
   const actionHandler = (actionInfo: BasicPageDataApi.Action) => {
@@ -93,7 +103,7 @@ export const Modal = (props: ModalProps) => {
         maskClosable={false}
         onOk={handleOK}
         onCancel={handleCancel}
-        footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler)}
+        footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler, request.loading)}
       >
         <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
           {modalFormBuilder(data?.layout.tabs[0].data || [])}
