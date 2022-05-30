@@ -50,6 +50,14 @@ export default () => {
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
+  const hidModal = ({ retry }: { retry?: boolean }) => {
+    if (retry) {
+      run();
+      setVisible(false);
+    }
+    setVisible(false);
+  };
+
   const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
     switch (actionInfo.action) {
       case 'modal':
@@ -96,7 +104,7 @@ export default () => {
         title="basic"
         modalDataUrl={modalDataUrl}
         visible={visible}
-        setVisible={setVisible}
+        hidModal={hidModal}
       />
     </PageContainer>
   );

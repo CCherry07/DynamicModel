@@ -8,7 +8,7 @@ import { modalFormBuilder } from './ModalFormBuilder';
 interface ModalProps {
   title: string;
   visible: boolean;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  hidModal: ({ retry }: { retry?: boolean }) => void;
   handleOK: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   handleCancel: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   modalDataUrl: string;
@@ -21,14 +21,14 @@ interface RequestParams extends BasicPageDataApi.DataSource {
   'X-API-KEY'?: 'antd';
 }
 export const Modal = (props: ModalProps) => {
-  const { modalDataUrl, handleOK, handleCancel, setVisible } = props;
+  const { modalDataUrl, handleOK, handleCancel, hidModal } = props;
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const initUrl = baseUrl + modalDataUrl + '?X-API-KEY=antd';
   const [form] = useForm();
   const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
     manual: true,
     onError() {
-      setVisible(false);
+      hidModal({});
     },
   });
   const request = useRequest(
@@ -43,7 +43,7 @@ export const Modal = (props: ModalProps) => {
     {
       manual: true,
       onSuccess: (res) => {
-        setVisible(false);
+        hidModal({ retry: true });
         message.success({
           content: res.message,
           key: 'process',
@@ -79,7 +79,7 @@ export const Modal = (props: ModalProps) => {
         form.resetFields();
         break;
       case 'cancel':
-        setVisible(false);
+        hidModal({});
       default:
         break;
     }
