@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Card } from 'antd';
-
+import { Table, Card, Modal as antdModal } from 'antd';
 import { useRequest } from 'umi';
 
 import { AfterTableLayout } from './components/AfterTableLayout';
@@ -57,8 +56,20 @@ export default () => {
     }
     setVisible(false);
   };
+  const confirmDeleteAdmin = (id: number, adminName: string) => {
+    antdModal.confirm({
+      title: `确定要删除这个<${adminName}>项目吗？`,
+      content: `点击确定删除 <${adminName}>`,
+      okText: '确定',
+      cancelText: '取消',
+      // onOk() {
+      //   deleteProject({ id })
+      // }
+    });
+  };
 
   const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
+    console.log(actionInfo);
     switch (actionInfo.action) {
       case 'modal':
         const uri = actionInfo.uri?.replace(/:\w+/g, (felid) => {
@@ -67,8 +78,14 @@ export default () => {
         setModalDataUrl(uri || '');
         setVisible(true);
         break;
-      case 'cancel':
-        setVisible(false);
+      case 'delete':
+        // TODO del prams
+        confirmDeleteAdmin(69, 'abc');
+        break;
+      case 'page':
+        //TODO page action
+        // setVisible(true);
+        break;
       default:
         break;
     }
