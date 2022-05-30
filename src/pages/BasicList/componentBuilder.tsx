@@ -8,7 +8,6 @@ export const actionsBuilder = (
   loading?: boolean,
   row?: any,
 ) => {
-  console.log(loading);
   return actions.map((action) => {
     if (action.component === 'button') {
       return (

@@ -50,11 +50,12 @@ export default () => {
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
-  const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: unknown) => {
+  const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
     switch (actionInfo.action) {
       case 'modal':
-        const { id } = row as BasicPageDataApi.DataSource;
-        const uri = actionInfo.uri?.replace(':id', String(id));
+        const uri = actionInfo.uri?.replace(/:\w+/g, (felid) => {
+          return row[felid.replace(':', '')];
+        });
         setModalDataUrl(uri || '');
         setVisible(true);
         break;
