@@ -33,11 +33,13 @@ export default () => {
   const [visible, setVisible] = useState(false);
 
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const rowSelection = {
     selectedRowKeys: selectedRowKeys,
     // selectedRows: any
-    onChange: (_selectedRowKeys: any[]) => {
+    onChange: (_selectedRowKeys: any[], _selectedRows: any[]) => {
       setSelectedRowKeys(_selectedRowKeys);
+      setSelectedRows(_selectedRows);
     },
   };
 
@@ -84,6 +86,37 @@ export default () => {
     });
   };
 
+  const BatchOverView = ({ dataSource }: { dataSource: any[] }) => {
+    const tableColumn = data?.layout.tableColumn.slice(0, 3) || [];
+    return (
+      <Table
+        size="small"
+        rowKey={'id'}
+        loading={loading}
+        columns={columnsBuilder(tableColumn)}
+        onChange={handleChange}
+        rowSelection={rowSelection}
+        dataSource={dataSource}
+      />
+    );
+  };
+
+  const confirmDeleteRows = () => {
+    antdModal.confirm({
+      title: (
+        <Mark
+          keywordSize="1.5rem"
+          target={`确定要删除<${selectedRows[0].username}>等管理员吗？`}
+          keyword={`<${selectedRows[0].username}>`}
+        />
+      ),
+      content: <BatchOverView dataSource={selectedRows} />,
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {},
+    });
+  };
+
   const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
     console.log(actionInfo);
     switch (actionInfo.action) {
@@ -96,6 +129,11 @@ export default () => {
         break;
       case 'delete':
         // TODO del prams
+        if ((actionInfo.type = 'danger')) {
+          // 批量删除
+          confirmDeleteRows();
+          return;
+        }
         confirmDeleteAdmin(row);
         break;
       case 'page':
@@ -120,6 +158,7 @@ export default () => {
       <Card>
         <SearchLayout />
         <BeforeTableLayout
+          pageReload={run}
           setModalDataUrl={setModalDataUrl}
           setVisible={setVisible}
           actions={data?.layout.tableToolBar || []}

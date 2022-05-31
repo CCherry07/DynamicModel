@@ -4,17 +4,19 @@ interface BeforeTableLayoutProps {
   actions: BasicPageDataApi.Action[];
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setModalDataUrl: React.Dispatch<React.SetStateAction<string>>;
+  pageReload: () => void;
 }
 export const BeforeTableLayout = (props: BeforeTableLayoutProps) => {
-  const { actions, setVisible, setModalDataUrl } = props;
+  const { actions, setVisible, setModalDataUrl, pageReload } = props;
+
   const actionsHandler = (actionInfo: BasicPageDataApi.Action) => {
     switch (actionInfo.action) {
       case 'modal':
         setModalDataUrl(actionInfo?.uri || '');
         setVisible(true);
         break;
-      case 'cancel':
-        setVisible(false);
+      case 'reload':
+        pageReload();
       default:
         break;
     }
