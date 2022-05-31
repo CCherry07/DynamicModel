@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { PageContainer } from '@ant-design/pro-layout';
-import { Table, Card, Modal as antdModal } from 'antd';
+import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
+import { Table, Card, Modal as antdModal, Space } from 'antd';
 import { useRequest } from 'umi';
 
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
 
-import { columnsBuilder } from './componentBuilder';
+import { actionsBuilder, columnsBuilder } from './componentBuilder';
 import { Modal } from '@/components/Modal';
+import { Mark } from '@/components/Mark';
 
 export interface PageConfig {
   page: number;
@@ -29,8 +30,17 @@ export default () => {
   const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
-
   const [visible, setVisible] = useState(false);
+
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+  const rowSelection = {
+    selectedRowKeys: selectedRowKeys,
+    // selectedRows: any
+    onChange: (_selectedRowKeys: any[]) => {
+      setSelectedRowKeys(_selectedRowKeys);
+    },
+  };
+
   const handleChange = (...args: any[]) => {
     const { field } = args[2];
     changeIsAsc(field && !isAsc);
@@ -55,10 +65,17 @@ export default () => {
     }
     setVisible(isOpen);
   };
-  const confirmDeleteAdmin = (id: number, adminName: string) => {
+  const confirmDeleteAdmin = (info: BasicPageDataApi.DataSource) => {
     antdModal.confirm({
-      title: `确定要删除这个<${adminName}>项目吗？`,
-      content: `点击确定删除 <${adminName}>`,
+      // title: `确定要删除<${info.username}>管理员吗？`,
+      title: (
+        <Mark
+          keywordSize="1.5rem"
+          target={`确定要删除<${info.username}>管理员吗？`}
+          keyword={`<${info.username}>`}
+        />
+      ),
+      content: `点击确定删除 <${info.username}>`,
       okText: '确定',
       cancelText: '取消',
       // onOk() {
@@ -79,7 +96,7 @@ export default () => {
         break;
       case 'delete':
         // TODO del prams
-        confirmDeleteAdmin(69, 'abc');
+        confirmDeleteAdmin(row);
         break;
       case 'page':
         //TODO page action
@@ -89,7 +106,15 @@ export default () => {
         break;
     }
   };
+  {
+    /* <Space>{actionsBuilder(data?.layout.batchToolBar || [], actionsHandler)}</Space> */
+  }
 
+  const FooterToolbarRedender = () => {
+    return selectedRowKeys.length ? (
+      <Space>{actionsBuilder(data?.layout.batchToolBar || [], actionsHandler)}</Space>
+    ) : null;
+  };
   return (
     <PageContainer>
       <Card>
@@ -110,6 +135,7 @@ export default () => {
           }}
           columns={columnsBuilder(data?.layout.tableColumn || [], actionsHandler)}
           onChange={handleChange}
+          rowSelection={rowSelection}
           dataSource={data?.dataSource}
         />
         <AfterTableLayout />
@@ -122,6 +148,7 @@ export default () => {
         visible={visible}
         hidModal={hidModal}
       />
+      <FooterToolbar renderContent={FooterToolbarRedender} />
     </PageContainer>
   );
 };
