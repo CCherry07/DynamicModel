@@ -49,12 +49,11 @@ export default () => {
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
-  const hidModal = ({ retry }: { retry?: boolean }) => {
+  const hidModal = ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => {
     if (retry) {
       run();
-      setVisible(false);
     }
-    setVisible(false);
+    setVisible(isOpen);
   };
   const confirmDeleteAdmin = (id: number, adminName: string) => {
     antdModal.confirm({
@@ -116,8 +115,8 @@ export default () => {
         <AfterTableLayout />
       </Card>
       <Modal
-        handleCancel={() => setVisible(false)}
-        handleOK={() => setVisible(false)}
+        handleCancel={() => hidModal({ isOpen: false })}
+        handleOK={() => hidModal({ isOpen: false })}
         title="basic"
         modalDataUrl={modalDataUrl}
         visible={visible}

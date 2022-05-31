@@ -8,7 +8,7 @@ import { modalFormBuilder } from './ModalFormBuilder';
 interface ModalProps {
   title: string;
   visible: boolean;
-  hidModal: ({ retry }: { retry?: boolean }) => void;
+  hidModal: ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => void;
   handleOK: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   handleCancel: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   modalDataUrl: string;
@@ -28,7 +28,7 @@ export const Modal = (props: ModalProps) => {
   const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
     manual: true,
     onError() {
-      hidModal({});
+      hidModal({ isOpen: false });
     },
   });
   const request = useRequest(
@@ -43,7 +43,7 @@ export const Modal = (props: ModalProps) => {
     {
       manual: true,
       onSuccess: (res) => {
-        hidModal({ retry: true });
+        hidModal({ retry: true, isOpen: false });
         message.success({
           content: res.message,
           key: 'process',
@@ -79,7 +79,7 @@ export const Modal = (props: ModalProps) => {
         form.resetFields();
         break;
       case 'cancel':
-        hidModal({});
+        hidModal({ isOpen: false });
       default:
         break;
     }
