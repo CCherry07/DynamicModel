@@ -1,15 +1,18 @@
+// import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import { Table, Card, Modal as antdModal, Space } from 'antd';
+import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { useRequest } from 'umi';
+// import { useDispatch } from 'react-redux'
 
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
-
+// import { adminListSlice } from '../../store/adminList.slice'
 import { actionsBuilder, columnsBuilder } from './componentBuilder';
 import { Modal } from '@/components/Modal';
 import { Mark } from '@/components/Mark';
+import { TableModal } from '@/components/TableModal';
 
 export interface PageConfig {
   page: number;
@@ -26,23 +29,65 @@ export default () => {
     order: 'asc',
   });
   const [isAsc, changeIsAsc] = useState(false);
+  // const dispatch = useDispatch()
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
+  const [actionMessage, setActionMessage] = useState<any>({});
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
+  type RequestConfig = {
+    uri: string;
+    method: string;
+    [key: string]: any;
+  };
+  const request = useRequest(
+    (config: RequestConfig) => {
+      const { uri, method, ...formData } = config;
+      return {
+        url: baseUrl + uri,
+        method,
+        data: formData,
+      };
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        message.success({
+          content: res.message,
+          key: 'process',
+        });
+        hidModal({ isOpen: false });
+      },
+      onError: () => {
+        hidModal({ isOpen: false });
+      },
+      formatResult(res: any) {
+        return res;
+      },
+    },
+  );
+  useEffect(() => {
+    run();
+  }, [pageConfig, run]);
   const [visible, setVisible] = useState(false);
-
+  const [antdVisible, setAntdVisible] = useState(false);
+  function hidModal({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) {
+    if (retry) {
+      run();
+    }
+    setVisible(isOpen);
+    setAntdVisible(isOpen);
+  }
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
   const rowSelection = {
     selectedRowKeys: selectedRowKeys,
-    // selectedRows: any
     onChange: (_selectedRowKeys: any[], _selectedRows: any[]) => {
       setSelectedRowKeys(_selectedRowKeys);
       setSelectedRows(_selectedRows);
     },
   };
-
   const handleChange = (...args: any[]) => {
     const { field } = args[2];
     changeIsAsc(field && !isAsc);
@@ -54,21 +99,12 @@ export default () => {
       return { ...state, ...orderConfig };
     });
   };
-  useEffect(() => {
-    run();
-  }, [pageConfig, run]);
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
 
-  const hidModal = ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => {
-    if (retry) {
-      run();
-    }
-    setVisible(isOpen);
-  };
   const confirmDeleteAdmin = (info: BasicPageDataApi.DataSource) => {
-    antdModal.confirm({
+    AntdModal.confirm({
       // title: `确定要删除<${info.username}>管理员吗？`,
       title: (
         <Mark
@@ -86,35 +122,18 @@ export default () => {
     });
   };
 
-  const BatchOverView = ({ dataSource }: { dataSource: any[] }) => {
-    const tableColumn = data?.layout.tableColumn.slice(0, 3) || [];
-    return (
-      <Table
-        size="small"
-        rowKey={'id'}
-        loading={loading}
-        columns={columnsBuilder(tableColumn)}
-        onChange={handleChange}
-        rowSelection={rowSelection}
-        dataSource={dataSource}
-      />
-    );
-  };
+  // () => hidModal({ isOpen: false })
 
-  const confirmDeleteRows = () => {
-    antdModal.confirm({
-      title: (
-        <Mark
-          keywordSize="1.5rem"
-          target={`确定要删除<${selectedRows[0].username}>等管理员吗？`}
-          keyword={`<${selectedRows[0].username}>`}
-        />
-      ),
-      content: <BatchOverView dataSource={selectedRows} />,
-      okText: '确定',
-      cancelText: '取消',
-      onOk: () => {},
-    });
+  const handleTabOK = (actionInfo: BasicPageDataApi.Action) => {
+    return () => {
+      request.run({
+        uri: actionInfo.uri || '',
+        method: 'post',
+        type: 'delete',
+        ids: selectedRowKeys,
+        'X-API-KEY': 'antd',
+      });
+    };
   };
 
   const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
@@ -129,9 +148,10 @@ export default () => {
         break;
       case 'delete':
         // TODO del prams
-        if ((actionInfo.type = 'danger')) {
+        if (actionInfo.type === 'danger') {
           // 批量删除
-          confirmDeleteRows();
+          setActionMessage(actionInfo);
+          setAntdVisible(true);
           return;
         }
         confirmDeleteAdmin(row);
@@ -144,10 +164,6 @@ export default () => {
         break;
     }
   };
-  {
-    /* <Space>{actionsBuilder(data?.layout.batchToolBar || [], actionsHandler)}</Space> */
-  }
-
   const FooterToolbarRedender = () => {
     return selectedRowKeys.length ? (
       <Space>{actionsBuilder(data?.layout.batchToolBar || [], actionsHandler)}</Space>
@@ -186,6 +202,17 @@ export default () => {
         modalDataUrl={modalDataUrl}
         visible={visible}
         hidModal={hidModal}
+      />
+      <TableModal
+        title={`将删除以下管理员`}
+        hidModal={hidModal}
+        loading={request.loading}
+        handleCancel={() => hidModal({ isOpen: false })}
+        handleOK={handleTabOK(actionMessage)}
+        rowSelection={rowSelection}
+        dataSource={selectedRows}
+        tabmodalVisible={antdVisible}
+        tableColumn={data?.layout.tableColumn.slice(0, 3)}
       />
       <FooterToolbar renderContent={FooterToolbarRedender} />
     </PageContainer>

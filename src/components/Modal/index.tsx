@@ -5,7 +5,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { modalFormBuilder } from './ModalFormBuilder';
-interface ModalProps {
+export interface ModalProps {
   title: string;
   visible: boolean;
   hidModal: ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => void;
