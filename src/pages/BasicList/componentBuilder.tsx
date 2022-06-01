@@ -26,11 +26,11 @@ export const actionsBuilder = (
 };
 
 export const columnsBuilder = (
-  tableColumn: BasicPageDataApi.Field[],
+  tableColumn?: BasicPageDataApi.Field[],
   actionsHandler?: (actionInfo: BasicPageDataApi.Action, row?: Record<string, any>) => void,
 ) => {
   const columns: BasicPageDataApi.Field[] = [];
-  tableColumn.forEach((column) => {
+  (tableColumn || []).forEach((column) => {
     if (column.hideInColumn === true) return;
     switch (column.type) {
       case 'datetime':
