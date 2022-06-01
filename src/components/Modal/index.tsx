@@ -2,11 +2,12 @@ import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
 import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
 import { Form, Input, message, Modal as AntdModal, Spin } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { modalFormBuilder } from './ModalFormBuilder';
 export interface ModalProps {
-  title: string;
+  title: string | ReactNode;
   visible: boolean;
   hidModal: ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => void;
   handleOK: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;

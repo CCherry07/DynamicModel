@@ -121,9 +121,6 @@ export default () => {
       // }
     });
   };
-
-  // () => hidModal({ isOpen: false })
-
   const handleTabOK = (actionInfo: BasicPageDataApi.Action) => {
     return () => {
       request
@@ -206,7 +203,12 @@ export default () => {
         hidModal={hidModal}
       />
       <TableModal
-        title={`将删除以下管理员`}
+        title={
+          <Mark
+            target={`将要删除以下${selectedRows[0]?.username}等管理员？`}
+            keyword={selectedRows[0]?.username}
+          />
+        }
         hidModal={hidModal}
         loading={request.loading}
         handleCancel={() => hidModal({ isOpen: false })}
