@@ -57,7 +57,8 @@ export const Modal = (props: ModalProps) => {
   //表单默认值
   const [initialValues, setInitialValues] = useState<any>({ status: true });
   useEffect(() => {
-    if (!props.visible) return;
+    // if (!props.visible) return;
+    console.log(props.visible);
     form.resetFields();
     run();
   }, [props.visible, run, form]);

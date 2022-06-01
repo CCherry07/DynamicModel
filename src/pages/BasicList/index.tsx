@@ -34,6 +34,8 @@ export default () => {
   const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
   const [actionMessage, setActionMessage] = useState<any>({});
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
+  const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
   type RequestConfig = {
     uri: string;
@@ -56,7 +58,7 @@ export default () => {
           content: res.message,
           key: 'process',
         });
-        hidModal({ isOpen: false });
+        hidModal({ isOpen: false, retry: true });
       },
       onError: () => {
         hidModal({ isOpen: false });
@@ -75,11 +77,9 @@ export default () => {
     if (retry) {
       run();
     }
-    setVisible(isOpen);
     setAntdVisible(isOpen);
+    setVisible(isOpen);
   }
-  const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
-  const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
   const rowSelection = {
     selectedRowKeys: selectedRowKeys,
@@ -126,13 +126,15 @@ export default () => {
 
   const handleTabOK = (actionInfo: BasicPageDataApi.Action) => {
     return () => {
-      request.run({
-        uri: actionInfo.uri || '',
-        method: 'post',
-        type: 'delete',
-        ids: selectedRowKeys,
-        'X-API-KEY': 'antd',
-      });
+      request
+        .run({
+          uri: actionInfo.uri || '',
+          method: 'post',
+          type: 'delete',
+          ids: selectedRowKeys,
+          'X-API-KEY': 'antd',
+        })
+        .finally(() => setSelectedRowKeys([]));
     };
   };
 

@@ -1,10 +1,13 @@
 import { columnsBuilder } from '@/pages/BasicList/componentBuilder';
 import { Button, Modal, Spin, Table } from 'antd';
 import type { TableRowSelection } from 'antd/lib/table/interface';
+import { useEffect, useState } from 'react';
 import type { ModalProps } from '../Modal';
 type BatchOverViewProps = {
   loading: boolean;
+  tabmodalVisible: boolean;
   tableColumn?: any[];
+  hidModal: ({ isOpen, retry }: { isOpen: boolean; retry?: boolean | undefined }) => void;
   rowSelection?: TableRowSelection<any>;
   dataSource?: readonly any[];
 };
@@ -13,23 +16,21 @@ type TableModalProps = {
   loading: boolean;
 } & BatchOverViewProps &
   Omit<ModalProps, 'visible' | 'modalDataUrl'>;
-
-export const BatchOverView = (props: BatchOverViewProps) => {
-  const { tableColumn, rowSelection, dataSource, loading } = props;
-  return (
-    <Spin spinning={loading}>
-      <Table
-        size="small"
-        rowKey={'id'}
-        columns={columnsBuilder(tableColumn)}
-        rowSelection={rowSelection}
-        dataSource={dataSource}
-      />
-    </Spin>
-  );
-};
 export const TableModal = (props: TableModalProps) => {
-  const { handleCancel, handleOK, title, loading } = props;
+  const {
+    dataSource,
+    rowSelection,
+    tabmodalVisible,
+    tableColumn,
+    handleCancel,
+    handleOK,
+    title,
+    loading,
+  } = props;
+  const [ownDataSource, setownDataSource] = useState(dataSource);
+  useEffect(() => {
+    setownDataSource(dataSource);
+  }, [tabmodalVisible]);
   return (
     <Modal
       title={title}
@@ -45,7 +46,15 @@ export const TableModal = (props: TableModalProps) => {
       ]}
       visible={props.tabmodalVisible}
     >
-      <BatchOverView {...props} />,
+      <Spin spinning={loading}>
+        <Table
+          size="small"
+          rowKey={'id'}
+          columns={columnsBuilder(tableColumn)}
+          rowSelection={rowSelection}
+          dataSource={ownDataSource}
+        />
+      </Spin>
     </Modal>
   );
 };
