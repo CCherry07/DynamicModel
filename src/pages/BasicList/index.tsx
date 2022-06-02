@@ -1,14 +1,11 @@
-// import { useMemo } from 'react';
 import { useEffect, useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { useRequest } from 'umi';
-// import { useDispatch } from 'react-redux'
 
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
-// import { adminListSlice } from '../../store/adminList.slice'
 import { actionsBuilder, columnsBuilder } from './componentBuilder';
 import { Modal } from '@/components/Modal';
 import { Mark } from '@/components/Mark';
@@ -29,7 +26,6 @@ export default () => {
     order: 'asc',
   });
   const [isAsc, changeIsAsc] = useState(false);
-  // const dispatch = useDispatch()
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
@@ -72,12 +68,12 @@ export default () => {
     run();
   }, [pageConfig, run]);
   const [visible, setVisible] = useState(false);
-  const [antdVisible, setAntdVisible] = useState(false);
+  const [tableVisible, setTableVisible] = useState(false);
   function hidModal({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) {
     if (retry) {
       run();
     }
-    setAntdVisible(isOpen);
+    setTableVisible(isOpen);
     setVisible(isOpen);
   }
 
@@ -150,7 +146,7 @@ export default () => {
         if (actionInfo.type === 'danger') {
           // 批量删除
           setActionMessage(actionInfo);
-          setAntdVisible(true);
+          setTableVisible(true);
           return;
         }
         confirmDeleteAdmin(row);
@@ -215,7 +211,7 @@ export default () => {
         handleOK={handleTabOK(actionMessage)}
         rowSelection={rowSelection}
         dataSource={selectedRows}
-        tabmodalVisible={antdVisible}
+        tabmodalVisible={tableVisible}
         tableColumn={data?.layout.tableColumn.slice(0, 3)}
       />
       <FooterToolbar renderContent={FooterToolbarRedender} />

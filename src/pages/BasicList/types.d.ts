@@ -64,6 +64,7 @@ declare module BasicPageDataApi {
     display_name: string;
     create_time: Date | string;
     delete_time: Date | string;
+    update_time: string;
     status: number;
     groups: Group[];
   };

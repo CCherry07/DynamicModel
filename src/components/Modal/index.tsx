@@ -1,7 +1,8 @@
 import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
 import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
-import { Form, Input, message, Modal as AntdModal, Spin } from 'antd';
+import { Button, Form, Input, message, Modal as AntdModal, Spin } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import moment from 'moment';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
@@ -26,7 +27,11 @@ export const Modal = (props: ModalProps) => {
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const initUrl = baseUrl + modalDataUrl + '?X-API-KEY=antd';
   const [form] = useForm();
-  const { data, run } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
+  const {
+    data,
+    run,
+    loading: formLoading,
+  } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
     manual: true,
     onError() {
       hidModal({ isOpen: false });
@@ -58,8 +63,7 @@ export const Modal = (props: ModalProps) => {
   //表单默认值
   const [initialValues, setInitialValues] = useState<any>({ status: true });
   useEffect(() => {
-    // if (!props.visible) return;
-    console.log(props.visible);
+    if (!props.visible) return;
     form.resetFields();
     run();
   }, [props.visible, run, form]);
@@ -97,6 +101,22 @@ export const Modal = (props: ModalProps) => {
     form.resetFields();
     form.setFieldsValue(setFieldsAdaptor(data, setInitialValues));
   }, [data, form]);
+  const footerConfig = () => {
+    const leftShowSlot = data?.dataSource?.update_time ? (
+      <Button
+        type="default"
+        style={{ position: 'absolute', left: '1rem' }}
+        key={data?.dataSource.update_time}
+      >
+        {moment(data?.dataSource.update_time).format('YYYY/MM/DD HH-mm-ss')}
+      </Button>
+    ) : null;
+    return [leftShowSlot].concat(
+      actionsBuilder(data?.layout.actions[0]?.data, actionHandler, request.loading),
+    );
+  };
+
+  const hidfieldConfig = ['update_time'];
   return (
     <div>
       <AntdModal
@@ -105,18 +125,20 @@ export const Modal = (props: ModalProps) => {
         maskClosable={false}
         onOk={handleOK}
         onCancel={handleCancel}
-        footer={actionsBuilder(data?.layout.actions[0]?.data || [], actionHandler, request.loading)}
+        footer={footerConfig()}
       >
-        <Spin spinning={request.loading}>
-          <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
-            {modalFormBuilder(data?.layout.tabs[0].data || [])}
-            <Form.Item name="uri" key={'uri'} hidden>
-              <Input />
-            </Form.Item>
-            <Form.Item name="method" key={'method'} hidden>
-              <Input />
-            </Form.Item>
-          </Form>
+        <Spin spinning={formLoading}>
+          <Spin spinning={request.loading}>
+            <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
+              {modalFormBuilder(data?.layout.tabs[0].data, hidfieldConfig)}
+              <Form.Item name="uri" key={'uri'} hidden>
+                <Input />
+              </Form.Item>
+              <Form.Item name="method" key={'method'} hidden>
+                <Input />
+              </Form.Item>
+            </Form>
+          </Spin>
         </Spin>
       </AntdModal>
     </div>
