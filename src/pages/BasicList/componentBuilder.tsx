@@ -3,12 +3,12 @@ import type { ButtonType } from 'antd/lib/button';
 import type { ColumnType } from 'antd/lib/table/interface';
 import moment from 'moment';
 export const actionsBuilder = (
-  actions: BasicPageDataApi.Action[],
+  actions?: BasicPageDataApi.Action[],
   actionsHandler?: (actionInfo: BasicPageDataApi.Action, row?: Record<string, any>) => void,
   loading?: boolean,
   row?: any,
 ) => {
-  return actions.map((action) => {
+  return (actions || []).map((action) => {
     if (action.component === 'button') {
       return (
         <Button

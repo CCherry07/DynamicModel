@@ -1,8 +1,14 @@
 import { Input, Form, TreeSelect, DatePicker, Switch } from 'antd';
 import type { ReactNode } from 'react';
 
-export const modalFormBuilder = (modalDate: BasicPageDataApi.Field[]): ReactNode => {
-  return modalDate.map((field) => {
+export const modalFormBuilder = (
+  modalDate?: BasicPageDataApi.Field[],
+  hidFieldConfig?: string[],
+): ReactNode => {
+  return (modalDate || []).map((field) => {
+    if (hidFieldConfig?.some((item) => item === field.key)) {
+      return null;
+    }
     switch (field.type) {
       case 'text':
         return (
