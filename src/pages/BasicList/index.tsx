@@ -3,10 +3,12 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { useRequest } from 'umi';
 
+import { actionsBuilder, columnsBuilder } from './componentBuilder';
+
 import { AfterTableLayout } from './components/AfterTableLayout';
 import { BeforeTableLayout } from './components/BeforeTableLayout';
 import { SearchLayout } from './components/SearchLayout';
-import { actionsBuilder, columnsBuilder } from './componentBuilder';
+
 import { Modal } from '@/components/Modal';
 import { Mark } from '@/components/Mark';
 import { TableModal } from '@/components/TableModal';
@@ -27,11 +29,15 @@ export default () => {
   });
   const [isAsc, changeIsAsc] = useState(false);
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
-  const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}&per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}&order=${pageConfig?.order}`;
+  const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}
+              &per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}
+              &order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
   const [actionMessage, setActionMessage] = useState<any>({});
   const [selectedRowKeys, setSelectedRowKeys] = useState<any[]>([]);
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
+  const [visible, setVisible] = useState(false);
+  const [tableVisible, setTableVisible] = useState(false);
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
   type RequestConfig = {
     uri: string;
@@ -67,9 +73,14 @@ export default () => {
   useEffect(() => {
     run();
   }, [pageConfig, run]);
-  const [visible, setVisible] = useState(false);
-  const [tableVisible, setTableVisible] = useState(false);
+  useEffect(() => {
+    if (!modalDataUrl) return;
+    setVisible(true);
+  }, [modalDataUrl]);
+  const handlePageConfig = (page: number, pageSize: number) =>
+    setPageConfig({ page, per_page: pageSize });
   function hidModal({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) {
+    setModalDataUrl('');
     if (retry) {
       run();
     }
@@ -77,13 +88,66 @@ export default () => {
     setVisible(isOpen);
   }
 
-  const rowSelection = {
-    selectedRowKeys: selectedRowKeys,
-    onChange: (_selectedRowKeys: any[], _selectedRows: any[]) => {
-      setSelectedRowKeys(_selectedRowKeys);
-      setSelectedRows(_selectedRows);
-    },
+  const confirmDeleteAdmin = (
+    row: BasicPageDataApi.DataSource,
+    actionInfo: BasicPageDataApi.Action,
+  ) => {
+    AntdModal.confirm({
+      title: (
+        <Mark
+          keywordSize="1.5rem"
+          target={`确定要删除<${row.username}>管理员吗？`}
+          keyword={`<${row.username}>`}
+        />
+      ),
+      content: `点击确定删除 <${row.username}>`,
+      okText: '确定',
+      cancelText: '取消',
+      onOk() {
+        return request
+          .run({
+            uri: actionInfo.uri || '',
+            method: 'post',
+            type: actionInfo.type,
+            ids: [row.id],
+            'X-API-KEY': 'antd',
+          })
+          .catch(() => Promise.resolve(true));
+      },
+    });
   };
+
+  const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
+    console.log(actionInfo);
+    switch (actionInfo.action) {
+      case 'modal':
+        const uri = actionInfo.uri?.replace(/:\w+/g, (felid) => {
+          return row[felid.replace(':', '')];
+        });
+        setModalDataUrl(uri || '');
+
+        break;
+      case 'delete':
+      case 'deletePermanently':
+      case 'restore':
+        // TODO del prams
+        if (actionInfo.type === 'danger') {
+          // 批量删除
+          setActionMessage(actionInfo);
+          setTableVisible(true);
+          return;
+        }
+        confirmDeleteAdmin(row, actionInfo);
+        break;
+      case 'page':
+        //TODO page action
+        // setVisible(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   const handleChange = (...args: any[]) => {
     const { field } = args[2];
     changeIsAsc(field && !isAsc);
@@ -96,27 +160,6 @@ export default () => {
     });
   };
 
-  const handlePageConfig = (page: number, pageSize: number) =>
-    setPageConfig({ page, per_page: pageSize });
-
-  const confirmDeleteAdmin = (info: BasicPageDataApi.DataSource) => {
-    AntdModal.confirm({
-      // title: `确定要删除<${info.username}>管理员吗？`,
-      title: (
-        <Mark
-          keywordSize="1.5rem"
-          target={`确定要删除<${info.username}>管理员吗？`}
-          keyword={`<${info.username}>`}
-        />
-      ),
-      content: `点击确定删除 <${info.username}>`,
-      okText: '确定',
-      cancelText: '取消',
-      // onOk() {
-      //   deleteProject({ id })
-      // }
-    });
-  };
   const handleTabOK = (actionInfo: BasicPageDataApi.Action) => {
     return () => {
       request
@@ -130,34 +173,12 @@ export default () => {
         .finally(() => setSelectedRowKeys([]));
     };
   };
-
-  const actionsHandler = (actionInfo: BasicPageDataApi.Action, row?: any) => {
-    console.log(actionInfo);
-    switch (actionInfo.action) {
-      case 'modal':
-        const uri = actionInfo.uri?.replace(/:\w+/g, (felid) => {
-          return row[felid.replace(':', '')];
-        });
-        setModalDataUrl(uri || '');
-        setVisible(true);
-        break;
-      case 'delete':
-        // TODO del prams
-        if (actionInfo.type === 'danger') {
-          // 批量删除
-          setActionMessage(actionInfo);
-          setTableVisible(true);
-          return;
-        }
-        confirmDeleteAdmin(row);
-        break;
-      case 'page':
-        //TODO page action
-        // setVisible(true);
-        break;
-      default:
-        break;
-    }
+  const rowSelection = {
+    selectedRowKeys: selectedRowKeys,
+    onChange: (_selectedRowKeys: any[], _selectedRows: any[]) => {
+      setSelectedRowKeys(_selectedRowKeys);
+      setSelectedRows(_selectedRows);
+    },
   };
   const FooterToolbarRedender = () => {
     return selectedRowKeys.length ? (
