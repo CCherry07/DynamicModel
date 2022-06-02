@@ -50,6 +50,12 @@
     component: './BasicList',
   },
   {
+    name: 'draw-page',
+    icon: 'table',
+    path: '/draw-page',
+    component: './components/DrawPage',
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

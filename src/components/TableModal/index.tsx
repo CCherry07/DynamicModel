@@ -1,4 +1,4 @@
-import { columnsBuilder } from '@/pages/BasicList/componentBuilder';
+import { columnsBuilder } from '@/pages/components/componentBuilder';
 import { Button, Modal, Spin, Table } from 'antd';
 import type { TableRowSelection } from 'antd/lib/table/interface';
 import { useEffect, useState } from 'react';

@@ -1,11 +1,11 @@
-import { actionsBuilder } from '@/pages/BasicList/componentBuilder';
-import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
-import { Button, Form, Input, message, Modal as AntdModal, Spin } from 'antd';
-import { useForm } from 'antd/es/form/Form';
-import moment from 'moment';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
+import { Button, Form, Input, message, Modal as AntdModal, Spin } from 'antd';
+import moment from 'moment';
+import { actionsBuilder } from '@/pages/components/componentBuilder';
+import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
+import { useForm } from 'antd/es/form/Form';
 import { modalFormBuilder } from './ModalFormBuilder';
 export interface ModalProps {
   title: string | ReactNode;

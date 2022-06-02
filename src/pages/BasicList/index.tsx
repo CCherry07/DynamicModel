@@ -3,11 +3,11 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { useRequest } from 'umi';
 
-import { actionsBuilder, columnsBuilder } from './componentBuilder';
+import { actionsBuilder, columnsBuilder } from '../components/componentBuilder';
 
-import { AfterTableLayout } from './components/AfterTableLayout';
-import { BeforeTableLayout } from './components/BeforeTableLayout';
-import { SearchLayout } from './components/SearchLayout';
+import { AfterTableLayout } from '../components/Layout/AfterTableLayout';
+import { BeforeTableLayout } from '../components/Layout/BeforeTableLayout';
+import { SearchLayout } from '../components/Layout/SearchLayout';
 
 import { Modal } from '@/components/Modal';
 import { Mark } from '@/components/Mark';
@@ -44,6 +44,14 @@ export default () => {
     method: string;
     [key: string]: any;
   };
+  const hidModal = ({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) => {
+    setModalDataUrl('');
+    if (retry) {
+      run();
+    }
+    setTableVisible(isOpen);
+    setVisible(isOpen);
+  };
   const request = useRequest(
     (config: RequestConfig) => {
       const { uri, method, ...formData } = config;
@@ -79,14 +87,6 @@ export default () => {
   }, [modalDataUrl]);
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
-  function hidModal({ retry, isOpen }: { retry?: boolean; isOpen: boolean }) {
-    setModalDataUrl('');
-    if (retry) {
-      run();
-    }
-    setTableVisible(isOpen);
-    setVisible(isOpen);
-  }
 
   const confirmDeleteAdmin = (
     row: BasicPageDataApi.DataSource,
