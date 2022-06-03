@@ -1,4 +1,5 @@
-import { Col, Row, Space } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Space, Tooltip } from 'antd';
 import { actionsBuilder } from '../../../builder/actionsBuilder';
 interface BeforeTableLayoutProps {
   actions: BasicPageDataApi.Action[];
@@ -28,7 +29,12 @@ export const BeforeTableLayout = (props: BeforeTableLayoutProps) => {
         ...
       </Col>
       <Col xs={24} sm={12} style={{ textAlign: 'right' }}>
-        <Space>{actionsBuilder(actions, actionsHandler)}</Space>
+        <Space>
+          <Tooltip title="Search">
+            <Button icon={<SearchOutlined />} shape="circle" />
+          </Tooltip>
+          {actionsBuilder(actions, actionsHandler)}
+        </Space>
       </Col>
     </Row>
   );
