@@ -10,27 +10,35 @@ export default () => {
   const initUrl = baseUrl + location.pathname.replace('/basic-list', '') + '?X-API-KEY=antd';
   const { data } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl);
   const [form] = useForm();
+  console.log(data);
+
   return (
     <PageContainer>
       <Row gutter={24}>
         <Col sm={16}>
           <Card>
             <Tabs type="card">
-              <Tabs.TabPane tab={data?.page.title} key={1}>
-                <Form form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
-                  {formBuilder(data?.layout.tabs[0].data)}
-                </Form>
-              </Tabs.TabPane>
+              {data?.layout.tabs.map((tab) => {
+                return (
+                  <Tabs.TabPane tab={tab.title} key={tab.title}>
+                    <Form form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
+                      {formBuilder(tab.data)}
+                    </Form>
+                  </Tabs.TabPane>
+                );
+              })}
             </Tabs>
           </Card>
         </Col>
         <Col sm={8}>
-          <Card>
-            <Space>{actionsBuilder(data?.layout.actions[0].data)}</Space>
+          <Card style={{ textAlign: 'center' }}>
+            {data?.layout.actions.map((action) => {
+              return <Space>{actionsBuilder(action.data)}</Space>;
+            })}
           </Card>
         </Col>
       </Row>
-      <FooterToolbar> footer </FooterToolbar>
+      <FooterToolbar> {actionsBuilder(data?.layout.actions[0].data)}</FooterToolbar>
     </PageContainer>
   );
 };
