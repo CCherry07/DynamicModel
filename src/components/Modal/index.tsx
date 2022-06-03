@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useRequest } from 'umi';
 import { Button, Form, Input, message, Modal as AntdModal, Spin } from 'antd';
 import moment from 'moment';
-import { actionsBuilder } from '@/pages/components/componentBuilder';
+import { actionsBuilder } from '@/builder/actionsBuilder';
 import { finishFormAdaptor, setFieldsAdaptor } from '@/uitls';
 import { useForm } from 'antd/es/form/Form';
-import { modalFormBuilder } from './ModalFormBuilder';
+import { formBuilder } from '../../builder/formBuilder';
 export interface ModalProps {
   title: string | ReactNode;
   visible: boolean;
@@ -130,7 +130,7 @@ export const Modal = (props: ModalProps) => {
         <Spin spinning={formLoading}>
           <Spin spinning={request.loading}>
             <Form form={form} {...formLayout} onFinish={onFinish} initialValues={initialValues}>
-              {modalFormBuilder(data?.layout.tabs[0].data, hidfieldConfig)}
+              {formBuilder(data?.layout.tabs[0].data, hidfieldConfig)}
               <Form.Item name="uri" key={'uri'} hidden>
                 <Input />
               </Form.Item>

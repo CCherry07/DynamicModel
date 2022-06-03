@@ -3,7 +3,8 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { useRequest } from 'umi';
 
-import { actionsBuilder, columnsBuilder } from '../components/componentBuilder';
+import { actionsBuilder } from '../../builder/actionsBuilder';
+import { columnsBuilder } from '@/builder/columnsBuilder';
 
 import { AfterTableLayout } from '../components/Layout/AfterTableLayout';
 import { BeforeTableLayout } from '../components/Layout/BeforeTableLayout';

@@ -52,7 +52,7 @@
   {
     name: 'draw-page',
     icon: 'table',
-    path: '/draw-page',
+    path: '/basic-list/api/admins/289',
     component: './components/DrawPage',
   },
   {

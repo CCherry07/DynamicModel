@@ -1,5 +1,5 @@
 import { Col, Row, Space } from 'antd';
-import { actionsBuilder } from '../componentBuilder';
+import { actionsBuilder } from '../../../builder/actionsBuilder';
 interface BeforeTableLayoutProps {
   actions: BasicPageDataApi.Action[];
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
