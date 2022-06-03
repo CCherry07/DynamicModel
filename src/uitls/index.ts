@@ -16,9 +16,10 @@ export const finishFormAdaptor: handleFinishFormType = (values) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
+// datetime => moment
 export const setFieldsAdaptor = (
   data: BasicPageDataApi.PageData,
-  setInitialValues: React.Dispatch<React.SetStateAction<any>>,
+  setInitialValues?: React.Dispatch<React.SetStateAction<any>>,
 ) => {
   if (!data.layout.tabs) return {};
   const adaptored = { ...(data.dataSource || {}) };
@@ -26,9 +27,11 @@ export const setFieldsAdaptor = (
     fields.forEach((field) => {
       if (field.type === 'datetime') {
         adaptored[field.key] = moment(adaptored[field.key]);
-        setInitialValues((state: any) => {
-          return { ...state, [field.key]: moment() };
-        });
+        if (setInitialValues) {
+          setInitialValues((state: any) => {
+            return { ...state, [field.key]: moment() };
+          });
+        }
       }
     });
   });

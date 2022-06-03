@@ -1,7 +1,10 @@
 import { formBuilder } from '@/builder/formBuilder';
+import { setFieldsAdaptor } from '@/uitls';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Card, Col, Form, Row, Space, Tabs } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Space, Tabs } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import moment from 'moment';
+import { useEffect } from 'react';
 import { useRequest, useLocation } from 'umi';
 import { actionsBuilder } from '../../../builder/actionsBuilder';
 export default () => {
@@ -10,8 +13,22 @@ export default () => {
   const initUrl = baseUrl + location.pathname.replace('/basic-list', '') + '?X-API-KEY=antd';
   const { data } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl);
   const [form] = useForm();
-  console.log(data);
 
+  useEffect(() => {
+    if (!data) return;
+    form.resetFields();
+    form.setFieldsValue(setFieldsAdaptor(data));
+  }, [data, form]);
+
+  const extraConfig = () => {
+    const leftShowSlot = data?.dataSource?.update_time ? (
+      <Button type="default" key={data?.dataSource.update_time}>
+        {moment(data?.dataSource.update_time).format('YYYY/MM/DD HH-mm-ss')}
+      </Button>
+    ) : null;
+    return leftShowSlot;
+  };
+  const hidfieldConfig = ['update_time'];
   return (
     <PageContainer>
       <Row gutter={24}>
@@ -22,7 +39,13 @@ export default () => {
                 return (
                   <Tabs.TabPane tab={tab.title} key={tab.title}>
                     <Form form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
-                      {formBuilder(tab.data)}
+                      {formBuilder(tab.data, hidfieldConfig)}
+                      <Form.Item name="uri" key={'uri'} hidden>
+                        <Input />
+                      </Form.Item>
+                      <Form.Item name="method" key={'method'} hidden>
+                        <Input />
+                      </Form.Item>
                     </Form>
                   </Tabs.TabPane>
                 );
@@ -38,7 +61,9 @@ export default () => {
           </Card>
         </Col>
       </Row>
-      <FooterToolbar> {actionsBuilder(data?.layout.actions[0].data)}</FooterToolbar>
+      <FooterToolbar extra={extraConfig()}>
+        {actionsBuilder(data?.layout.actions[0].data)}
+      </FooterToolbar>
     </PageContainer>
   );
 };
