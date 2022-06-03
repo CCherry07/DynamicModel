@@ -117,7 +117,9 @@ export default () => {
             <Col sm={8}>
               <Card style={{ textAlign: 'center' }}>
                 {data?.layout.actions.map((action) => {
-                  return <Space>{actionsBuilder(action.data, actionHandler)}</Space>;
+                  return (
+                    <Space key={action.type}>{actionsBuilder(action.data, actionHandler)}</Space>
+                  );
                 })}
               </Card>
             </Col>

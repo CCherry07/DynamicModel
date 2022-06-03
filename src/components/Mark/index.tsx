@@ -10,7 +10,7 @@ export const Mark = ({ target, keyword, color, keywordSize }: MarkProps) => {
   return (
     <>
       {stringSlices.map((str, index) => (
-        <span key={index}>
+        <span key={str}>
           {str}
           {index === stringSlices.length - 1 ? null : (
             <span style={{ fontSize: keywordSize, color: color || '#448df7' }}>{keyword}</span>
