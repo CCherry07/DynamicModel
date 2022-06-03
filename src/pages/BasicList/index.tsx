@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { history, useRequest } from 'umi';
+import { useToggle } from 'ahooks';
 
 import { actionsBuilder } from '../../builder/actionsBuilder';
 import { columnsBuilder } from '@/builder/columnsBuilder';
@@ -39,6 +40,7 @@ export default () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
+  const [isSearch, setIsSearch] = useToggle(true);
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
   type RequestConfig = {
     uri: string;
@@ -86,9 +88,13 @@ export default () => {
     if (!modalDataUrl) return;
     setVisible(true);
   }, [modalDataUrl]);
+
+  useEffect(() => {
+    // todo search
+  }, [isSearch]);
+
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
-
   const confirmDeleteAdmin = (
     row: BasicPageDataApi.DataSource,
     actionInfo: BasicPageDataApi.Action,
@@ -195,10 +201,12 @@ export default () => {
   return (
     <PageContainer>
       <Card>
-        <SearchLayout />
+        <SearchLayout isSearch={isSearch} setIsSearch={setIsSearch} />
         <BeforeTableLayout
           pageReload={run}
+          isSearch={isSearch}
           setModalDataUrl={setModalDataUrl}
+          setIsSearch={setIsSearch}
           setVisible={setVisible}
           actions={data?.layout.tableToolBar || []}
         />
