@@ -53,7 +53,7 @@
     name: 'draw-page',
     icon: 'table',
     path: '/basic-list/api/admins/*',
-    component: './components/DrawPage',
+    component: './components/DrawFormPage',
   },
   {
     path: '/',

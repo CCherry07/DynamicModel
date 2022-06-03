@@ -16,7 +16,7 @@ export interface ModalProps {
   modalDataUrl: string;
   handleShowModalData?: (data: any) => void;
 }
-interface RequestParams extends BasicPageDataApi.DataSource {
+export interface RequestParams extends BasicPageDataApi.DataSource {
   uri?: string;
   method: string;
   password: string;
