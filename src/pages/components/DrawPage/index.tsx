@@ -1,17 +1,44 @@
 import { formBuilder } from '@/builder/formBuilder';
 import { setFieldsAdaptor } from '@/uitls';
 import { FooterToolbar, PageContainer } from '@ant-design/pro-layout';
-import { Button, Card, Col, Form, Input, Row, Space, Tabs } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Space, Spin, Tabs } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import { useEffect } from 'react';
-import { useRequest, useLocation } from 'umi';
+import { useRequest, useLocation, history } from 'umi';
 import { actionsBuilder } from '../../../builder/actionsBuilder';
 export default () => {
   const location = useLocation();
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
   const initUrl = baseUrl + location.pathname.replace('/basic-list', '') + '?X-API-KEY=antd';
-  const { data } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl);
+  const { data, loading } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
+    onError() {
+      history.goBack();
+    },
+  });
+  // const request = useRequest(
+  //   (config: any) => {
+  //     const { uri, method, ...formData } = config;
+  //     return {
+  //       url: baseUrl + uri,
+  //       method,
+  //       data: formData,
+  //     };
+  //   },
+  //   {
+  //     manual: true,
+  //     onSuccess: (res) => {
+  //       message.success({
+  //         content: res.message,
+  //         key: 'process',
+  //       });
+  //       history.goBack()
+  //     },
+  //     formatResult(res: any) {
+  //       return res;
+  //     },
+  //   },
+  // );
   const [form] = useForm();
 
   useEffect(() => {
@@ -38,15 +65,17 @@ export default () => {
               {data?.layout.tabs.map((tab) => {
                 return (
                   <Tabs.TabPane tab={tab.title} key={tab.title}>
-                    <Form form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
-                      {formBuilder(tab.data, hidfieldConfig)}
-                      <Form.Item name="uri" key={'uri'} hidden>
-                        <Input />
-                      </Form.Item>
-                      <Form.Item name="method" key={'method'} hidden>
-                        <Input />
-                      </Form.Item>
-                    </Form>
+                    <Spin spinning={loading}>
+                      <Form form={form} labelCol={{ span: 4 }} wrapperCol={{ span: 12 }}>
+                        {formBuilder(tab.data, hidfieldConfig)}
+                        <Form.Item name="uri" key={'uri'} hidden>
+                          <Input />
+                        </Form.Item>
+                        <Form.Item name="method" key={'method'} hidden>
+                          <Input />
+                        </Form.Item>
+                      </Form>
+                    </Spin>
                   </Tabs.TabPane>
                 );
               })}
