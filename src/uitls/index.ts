@@ -26,11 +26,19 @@ export const finishFormAdaptor: handleFinishFormType = (values, options) => {
     if (moment.isMoment(finishAdaptored[key])) {
       finishAdaptored[key] = moment(finishAdaptored[key]).format();
     }
+    if (Array.isArray(finishAdaptored[key])) {
+      finishAdaptored[key] = finishAdaptored[key].map((value: any) => {
+        if (moment.isMoment(value)) {
+          return moment(value).format();
+        }
+        return value;
+      });
+    }
   });
+  console.log(finishAdaptored);
+
   return finishAdaptored;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-shadow
 // datetime => moment
 export const setFieldsAdaptor = (
   data: BasicPageDataApi.PageData,
