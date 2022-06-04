@@ -1,9 +1,9 @@
 .searchLayout :global(.ant-form-item-label) {
-  flex: 0 0 38% !important;
+  flex: 0 0 36% !important;
   flex-grow: 0 !important;
   max-width: 100% !important;
 }
 .searchLayout :global(.ant-form-item) {
-  margin-bottom: 10px !important;
   margin-right: 0 !important;
+  margin-bottom: 10px !important;
 }

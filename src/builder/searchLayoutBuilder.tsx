@@ -20,9 +20,13 @@ export const searchLayoutBuilder = (
         );
       case 'datetime':
         return (
-          <Col sm={6}>
+          <Col sm={12}>
             <Form.Item key={field.key} label={field.title} name={field.key}>
-              <DatePicker disabled={field?.disabled} showTime />
+              <DatePicker.RangePicker
+                style={{ width: '100%' }}
+                disabled={field?.disabled}
+                showTime
+              />
             </Form.Item>
           </Col>
         );
