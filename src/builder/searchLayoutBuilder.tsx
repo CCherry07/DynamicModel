@@ -13,7 +13,7 @@ export const searchLayoutBuilder = (
       case 'text':
         return (
           <Col sm={6}>
-            <Form.Item key={field.key} label={field.key} name={field.key}>
+            <Form.Item key={field.key} label={field.title} name={field.key}>
               <Input disabled={field?.disabled} />
             </Form.Item>
           </Col>
@@ -21,7 +21,7 @@ export const searchLayoutBuilder = (
       case 'datetime':
         return (
           <Col sm={6}>
-            <Form.Item key={field.key} label={field.key} name={field.key}>
+            <Form.Item key={field.key} label={field.title} name={field.key}>
               <DatePicker disabled={field?.disabled} showTime />
             </Form.Item>
           </Col>
@@ -29,7 +29,7 @@ export const searchLayoutBuilder = (
       case 'tree':
         return (
           <Col sm={6}>
-            <Form.Item key={field.key} label={field.key} name={field.key}>
+            <Form.Item key={field.key} label={field.title} name={field.key}>
               <TreeSelect treeCheckable disabled={field?.disabled} treeData={field.data} />
             </Form.Item>
           </Col>
@@ -37,7 +37,7 @@ export const searchLayoutBuilder = (
       case 'switch':
         return (
           <Col sm={6}>
-            <Form.Item key={field.key} label={field.key} name={field.key} valuePropName="checked">
+            <Form.Item key={field.key} label={field.title} name={field.key} valuePropName="checked">
               <Switch disabled={field?.disabled} />
             </Form.Item>
           </Col>
