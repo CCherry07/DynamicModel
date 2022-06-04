@@ -1,1 +1,4 @@
-export type handleFinishFormType = <D>(values: D) => D;
+export type handleFinishFormType = <D, O extends Record<string, any>>(
+  values: D,
+  options?: O,
+) => D & O;

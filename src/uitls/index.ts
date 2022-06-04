@@ -2,12 +2,27 @@ import moment from 'moment';
 import type React from 'react';
 import type { handleFinishFormType } from './types';
 // create time change to moment,format
-export const finishFormAdaptor: handleFinishFormType = (values) => {
+const isVoid = (value: unknown) => (value === (undefined || null || '') ? true : false);
+export const clearObject = (target: Record<string, any>) => {
+  const resObj = { ...target };
+  Object.keys(resObj).forEach((key: string) => {
+    if (isVoid(resObj[key])) {
+      delete resObj[key];
+    }
+  });
+  return resObj;
+};
+
+export const finishFormAdaptor: handleFinishFormType = (values, options) => {
   const finishAdaptored = {
     ...values,
-    'X-API-KEY': 'antd',
-  } as const;
+    ...options,
+  } as any;
   Object.keys(finishAdaptored).forEach((key) => {
+    if (isVoid(finishAdaptored[key])) {
+      delete finishAdaptored[key];
+      return;
+    }
     if (moment.isMoment(finishAdaptored[key])) {
       finishAdaptored[key] = moment(finishAdaptored[key]).format();
     }
