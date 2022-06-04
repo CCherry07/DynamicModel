@@ -201,7 +201,11 @@ export default () => {
   return (
     <PageContainer>
       <Card>
-        <SearchLayout isSearch={isSearch} setIsSearch={setIsSearch} />
+        <SearchLayout
+          fields={data?.layout.tableColumn}
+          isSearch={isSearch}
+          setIsSearch={setIsSearch}
+        />
         <BeforeTableLayout
           pageReload={run}
           isSearch={isSearch}
