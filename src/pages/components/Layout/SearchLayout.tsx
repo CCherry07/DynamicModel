@@ -10,9 +10,13 @@ interface SearchLayoutProps {
 
 export const SearchLayout = (props: SearchLayoutProps) => {
   const { isSearch, fields } = props;
+
+  const onFinish = (values: any) => {
+    console.log(values);
+  };
   return isSearch ? (
     <div className={styles.searchLayout}>
-      <Form layout="inline">
+      <Form layout="inline" onFinish={onFinish}>
         <Row gutter={24}>
           <Col sm={6}>
             <Form.Item key="iD" label="ID" name="id">
@@ -24,7 +28,10 @@ export const SearchLayout = (props: SearchLayoutProps) => {
         <Col sm={24} style={{ textAlign: 'right' }}>
           <Space>
             <Button> clear </Button>
-            <Button type="primary"> submit </Button>
+            <Button type="primary" htmlType="submit">
+              {' '}
+              submit{' '}
+            </Button>
           </Space>
         </Col>
       </Form>

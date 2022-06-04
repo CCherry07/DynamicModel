@@ -1,4 +1,4 @@
-import { Col, DatePicker, Form, Input, Switch, TreeSelect } from 'antd';
+import { Col, DatePicker, Form, Input, Select, TreeSelect } from 'antd';
 import moment from 'moment';
 import type { ReactNode } from 'react';
 
@@ -48,11 +48,16 @@ export const searchLayoutBuilder = (
             </Form.Item>
           </Col>
         );
+      case 'select':
       case 'switch':
         return (
           <Col sm={6}>
-            <Form.Item key={field.key} label={field.title} name={field.key} valuePropName="checked">
-              <Switch disabled={field?.disabled} />
+            <Form.Item key={field.key} label={field.title} name={field.key}>
+              <Select>
+                {(field.data || []).map((option) => {
+                  return <Select.Option value={option.value}>{option.title}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
         );
