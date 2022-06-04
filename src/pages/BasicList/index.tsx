@@ -3,6 +3,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { history, useRequest } from 'umi';
 import { useToggle } from 'ahooks';
+import { stringify } from 'query-string';
 
 import { actionsBuilder } from '../../builder/actionsBuilder';
 import { columnsBuilder } from '@/builder/columnsBuilder';
@@ -45,6 +46,9 @@ export default () => {
     return {
       url,
       params: config,
+      paramsSerializer: (params: any) => {
+        return stringify(params, { arrayFormat: 'comma', skipEmptyString: true, skipNull: true });
+      },
     };
   });
   type RequestConfig = {
