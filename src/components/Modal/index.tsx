@@ -69,7 +69,7 @@ export const Modal = (props: ModalProps) => {
   }, [props.visible, run, form]);
   //表单提交
   const onFinish = (values: RequestParams) => {
-    request.run(finishFormAdaptor(values));
+    request.run(finishFormAdaptor(values, { 'X-API-KEY': 'antd' }));
   };
 
   const actionHandler = (actionInfo: BasicPageDataApi.Action) => {

@@ -41,7 +41,12 @@ export default () => {
   const [visible, setVisible] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
   const [isSearch, setIsSearch] = useToggle(true);
-  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(url);
+  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>((config) => {
+    return {
+      url,
+      params: config,
+    };
+  });
   type RequestConfig = {
     uri: string;
     method: string;
@@ -205,6 +210,7 @@ export default () => {
           fields={data?.layout.tableColumn}
           isSearch={isSearch}
           setIsSearch={setIsSearch}
+          run={run}
         />
         <BeforeTableLayout
           pageReload={run}
