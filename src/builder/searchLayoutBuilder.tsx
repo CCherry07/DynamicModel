@@ -1,4 +1,5 @@
 import { Col, DatePicker, Form, Input, Switch, TreeSelect } from 'antd';
+import moment from 'moment';
 import type { ReactNode } from 'react';
 
 export const searchLayoutBuilder = (
@@ -26,6 +27,15 @@ export const searchLayoutBuilder = (
                 style={{ width: '100%' }}
                 disabled={field?.disabled}
                 showTime
+                ranges={{
+                  ToDay: [moment().startOf('day'), moment().endOf('day')],
+                  'Last 7 Days': [moment().subtract(7, 'd'), moment()],
+                  'Last 30 Days': [moment().subtract(30, 'days'), moment()],
+                  'Last Month': [
+                    moment().subtract(1, 'months').startOf('month'),
+                    moment().subtract(1, 'months').endOf('month'),
+                  ],
+                }}
               />
             </Form.Item>
           </Col>
