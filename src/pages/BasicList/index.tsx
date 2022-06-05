@@ -41,7 +41,7 @@ export default () => {
   const [selectedRows, setSelectedRows] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
-  const [isSearch, setIsSearch] = useToggle(true);
+  const [isSearch, setIsSearch] = useToggle(false);
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>((config) => {
     return {
       url,
