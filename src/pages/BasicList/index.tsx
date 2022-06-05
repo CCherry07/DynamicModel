@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
-import { history, useRequest } from 'umi';
+import { history, useRequest, useLocation } from 'umi';
 import { useToggle } from 'ahooks';
 import { stringify } from 'query-string';
 
@@ -31,8 +31,11 @@ export default () => {
     order: 'asc',
   });
   const [isAsc, changeIsAsc] = useState(false);
+  const location = useLocation();
   const baseUrl = 'https://public-api-v2.aspirantzhang.com';
-  const url = `${baseUrl}/api/admins?X-API-KEY=antd&page=${pageConfig.page}
+  const url = `${baseUrl}${location.pathname.replace('/basic-list', '')}?X-API-KEY=antd&page=${
+    pageConfig.page
+  }
               &per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}
               &order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
@@ -92,7 +95,7 @@ export default () => {
   );
   useEffect(() => {
     run();
-  }, [pageConfig, run]);
+  }, [pageConfig, run, location.pathname]);
   useEffect(() => {
     if (!modalDataUrl) return;
     setVisible(true);

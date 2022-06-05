@@ -65,7 +65,7 @@ export const formBuilder = (
         );
       case 'parent':
         return (
-          <Form.Item>
+          <Form.Item {...baseAttr}>
             <TreeSelect
               showSearch
               style={{ width: '100%' }}

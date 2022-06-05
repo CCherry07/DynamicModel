@@ -44,17 +44,16 @@
     component: './TableList',
   },
   {
-    name: 'basiclist',
-    icon: 'table',
-    path: '/basiclist',
-    component: './BasicList',
-  },
-  {
-    name: 'draw-page',
-    icon: 'table',
-    path: '/basic-list/api/admins/*',
+    path: '/basic-list/api/*/*',
     component: './components/DrawFormPage',
   },
+  {
+    name: 'basiclist',
+    icon: 'table',
+    path: '/basic-list/*',
+    component: './BasicList',
+  },
+
   {
     path: '/',
     redirect: '/welcome',
