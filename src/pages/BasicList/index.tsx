@@ -78,6 +78,7 @@ export default () => {
     },
     {
       manual: true,
+      throttleInterval: 1000,
       onSuccess: (res) => {
         message.success({
           content: res.message,
@@ -97,6 +98,7 @@ export default () => {
   useUpdateEffect(() => {
     run();
   }, [pageConfig, run, location.pathname]);
+
   useEffect(() => {
     if (!modalDataUrl) return;
     setVisible(true);
