@@ -165,7 +165,6 @@ export default () => {
           actionInfo.uri?.replace(/:\w+/g, (felid) => {
             return row[felid.replace(':', '')];
           });
-        console.log(pageEdituri);
         history.push(pageEdituri);
         // setModalDataUrl(ur || '');
         break;
