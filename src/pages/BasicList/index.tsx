@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import { Table, Card, Modal as AntdModal, Space, message } from 'antd';
 import { history, useRequest, useLocation } from 'umi';
-import { useToggle } from 'ahooks';
+import { useToggle, useUpdateEffect } from 'ahooks';
 import { stringify } from 'query-string';
 
 import { actionsBuilder } from '../../builder/actionsBuilder';
@@ -93,7 +93,8 @@ export default () => {
       },
     },
   );
-  useEffect(() => {
+
+  useUpdateEffect(() => {
     run();
   }, [pageConfig, run, location.pathname]);
   useEffect(() => {
