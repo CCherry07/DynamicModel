@@ -161,14 +161,12 @@ export default () => {
         confirmDeleteAdmin(row, actionInfo);
         break;
       case 'page':
-        //TODO page action
         const pageEdituri =
           '/basic-list' +
           actionInfo.uri?.replace(/:\w+/g, (felid) => {
             return row[felid.replace(':', '')];
           });
         history.push(pageEdituri);
-        // setModalDataUrl(ur || '');
         break;
       default:
         break;
