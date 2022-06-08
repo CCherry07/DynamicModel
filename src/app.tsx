@@ -11,6 +11,7 @@ import {
 } from './services/ant-design-pro/api';
 import defaultSettings from '../config/defaultSettings';
 import { message } from 'antd';
+import type { ResponseError } from 'umi-request';
 const loginPath = '/user/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -82,6 +83,43 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     menuHeaderRender: undefined,
     menuDataRender: () => {
       return initialState?.currentMenu;
+    },
+    errorHandler: (error: ResponseError) => {
+      switch (error.name) {
+        case 'BizError':
+          if (error.data.message) {
+            message.error({
+              content: error.data.message,
+              key: 'process',
+              duration: 20,
+            });
+          } else {
+            message.error({
+              content: 'Business Error, please try again.',
+              key: 'process',
+              duration: 20,
+            });
+          }
+          break;
+        case 'ResponseError':
+          message.error({
+            content: `${error.response.status} ${error.response.statusText}. Please try again.`,
+            key: 'process',
+            duration: 20,
+          });
+          break;
+        case 'TypeError':
+          message.error({
+            content: `Network error. Please try again.`,
+            key: 'process',
+            duration: 20,
+          });
+          break;
+        default:
+          break;
+      }
+
+      throw error;
     },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
