@@ -6,7 +6,7 @@ import { request } from 'umi';
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>('https://public-api-v2.aspirantzhang.com/api/admins/info?X-API-KEY=antd', {
     method: 'GET',
     ...(options || {}),
   });
@@ -20,7 +20,7 @@ export async function currentMenu(options?: { [key: string]: any }) {
 
 /** 退出登录接口 POST /api/login/outLogin */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
+  return request<Record<string, any>>('https://public-api-v2.aspirantzhang.com/api/admins/logout', {
     method: 'POST',
     ...(options || {}),
   });
@@ -28,7 +28,7 @@ export async function outLogin(options?: { [key: string]: any }) {
 
 /** 登录接口 POST /api/login/account */
 export async function login(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.LoginResult>('/api/login/account', {
+  return request<API.LoginResult>('https://public-api-v2.aspirantzhang.com/api/admins/login', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
