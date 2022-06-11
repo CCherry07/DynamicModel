@@ -42,15 +42,24 @@ export default () => {
   const [visible, setVisible] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
   const [isSearch, setIsSearch] = useToggle(false);
-  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>((config) => {
-    return {
-      url,
-      params: config,
-      paramsSerializer: (params: any) => {
-        return stringify(params, { arrayFormat: 'comma', skipEmptyString: true, skipNull: true });
+  const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(
+    (config) => {
+      return {
+        url,
+        params: config,
+        paramsSerializer: (params: any) => {
+          return stringify(params, { arrayFormat: 'comma', skipEmptyString: true, skipNull: true });
+        },
+      };
+    },
+    {
+      // 成功后，清理checklist
+      onSuccess: () => {
+        setSelectedRowKeys([]);
+        setSelectedRows([]);
       },
-    };
-  });
+    },
+  );
   type RequestConfig = {
     uri: string;
     method: string;
@@ -76,11 +85,13 @@ export default () => {
     {
       manual: true,
       throttleInterval: 1000,
-      onSuccess: (res) => {
+      onSuccess: (res: BasicPageDataApi.Root) => {
         message.success({
           content: res.message,
           key: 'process',
         });
+        // 删除和操作更新后重新获取数据
+        run();
         hidModal({ isOpen: false, retry: true });
       },
       onError: () => {
