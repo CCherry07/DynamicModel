@@ -58,7 +58,7 @@ export const formBuilder = (
               <Radio.Group buttonStyle="solid" defaultValue={field.data ? field.data[0].value : ''}>
                 {field.data?.map((item) => {
                   return (
-                    <Radio.Button key={item.key} value={item.value}>
+                    <Radio.Button key={item.value} value={item.value}>
                       {item.name}
                     </Radio.Button>
                   );
