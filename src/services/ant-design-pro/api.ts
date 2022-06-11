@@ -4,9 +4,7 @@ import { request } from 'umi';
 
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(options?: { [key: string]: any }) {
-  return request<{
-    data: API.CurrentUser;
-  }>('https://public-api-v2.aspirantzhang.com/api/admins/info?X-API-KEY=antd', {
+  return request('https://public-api-v2.aspirantzhang.com/api/admins/info?X-API-KEY=antd', {
     method: 'GET',
     ...(options || {}),
   });
