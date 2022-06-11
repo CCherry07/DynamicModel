@@ -44,19 +44,30 @@ const Login: React.FC = () => {
         currentUser: userInfo,
       }));
     }
+    console.log(initialState);
+  };
+  const fetchMenu = async () => {
+    const menus = await initialState?.fetchMenu?.();
+    if (menus) {
+      await setInitialState((s) => ({
+        ...s,
+        currentMenu: menus,
+      }));
+    }
   };
 
   const handleSubmit = async (values: API.LoginParams) => {
     try {
       // 登录
       const msg = await login({ ...values, type });
-      if (msg.status === 'ok') {
+      if (msg.success === true) {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
+        await fetchMenu();
         /** 此方法会跳转到 redirect 参数所在的位置 */
         if (!history) return;
         const { query } = history.location;
@@ -75,7 +86,7 @@ const Login: React.FC = () => {
       message.error(defaultLoginFailureMessage);
     }
   };
-  const { status, type: loginType } = userLoginState;
+  const { success: status, type: loginType } = userLoginState;
 
   return (
     <div className={styles.container}>
@@ -100,13 +111,7 @@ const Login: React.FC = () => {
             <TaobaoCircleOutlined key="TaobaoCircleOutlined" className={styles.icon} />,
             <WeiboCircleOutlined key="WeiboCircleOutlined" className={styles.icon} />,
           ]}
-          onFinish={async () => {
-            const values = {
-              autoLogin: true,
-              password: 'ant.design',
-              type: 'account',
-              username: 'admin',
-            };
+          onFinish={async (values) => {
             await handleSubmit(values as API.LoginParams);
           }}
         >
@@ -127,7 +132,7 @@ const Login: React.FC = () => {
             />
           </Tabs>
 
-          {status === 'error' && loginType === 'account' && (
+          {status === false && loginType === 'account' && (
             <LoginMessage
               content={intl.formatMessage({
                 id: 'pages.login.accountLogin.errorMessage',
@@ -184,7 +189,7 @@ const Login: React.FC = () => {
             </>
           )}
 
-          {status === 'error' && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
+          {status === false && loginType === 'mobile' && <LoginMessage content="验证码错误" />}
           {type === 'mobile' && (
             <>
               <ProFormText
