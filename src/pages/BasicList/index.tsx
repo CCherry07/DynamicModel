@@ -32,10 +32,7 @@ export default () => {
   });
   const [isAsc, changeIsAsc] = useState(false);
   const location = useLocation();
-  const baseUrl = 'https://public-api-v2.aspirantzhang.com';
-  const url = `${baseUrl}${location.pathname.replace('/basic-list', '')}?X-API-KEY=antd&page=${
-    pageConfig.page
-  }
+  const url = `${location.pathname.replace('/basic-list', '')}?page=${pageConfig.page}
               &per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}
               &order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
@@ -71,7 +68,7 @@ export default () => {
     (config: RequestConfig) => {
       const { uri, method, ...formData } = config;
       return {
-        url: baseUrl + uri,
+        url: uri,
         method,
         data: formData,
       };
@@ -132,7 +129,6 @@ export default () => {
             method: 'post',
             type: actionInfo.type,
             ids: [row.id],
-            'X-API-KEY': 'antd',
           })
           .catch(() => Promise.resolve(true));
       },
@@ -193,7 +189,6 @@ export default () => {
           method: 'post',
           type: 'delete',
           ids: selectedRowKeys,
-          'X-API-KEY': 'antd',
         })
         .finally(() => setSelectedRowKeys([]));
     };

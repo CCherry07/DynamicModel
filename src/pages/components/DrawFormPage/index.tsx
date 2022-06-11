@@ -10,8 +10,7 @@ import { useRequest, useLocation, history } from 'umi';
 import { actionsBuilder } from '../../../builder/actionsBuilder';
 export default () => {
   const location = useLocation();
-  const baseUrl = 'https://public-api-v2.aspirantzhang.com';
-  const initUrl = baseUrl + location.pathname.replace('/basic-list', '') + '?X-API-KEY=antd';
+  const initUrl = location.pathname.replace('/basic-list', '');
   const { data, loading } = useRequest<{ data: BasicPageDataApi.PageData }>(initUrl, {
     onError() {
       history.goBack();
@@ -21,7 +20,7 @@ export default () => {
     (config: RequestParams) => {
       const { uri, method, ...formData } = config;
       return {
-        url: baseUrl + uri,
+        url: uri,
         method,
         data: formData,
       };

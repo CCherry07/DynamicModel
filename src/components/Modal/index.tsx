@@ -20,12 +20,10 @@ export interface RequestParams extends BasicPageDataApi.DataSource {
   uri?: string;
   method: string;
   password: string;
-  'X-API-KEY'?: 'antd';
 }
 export const Modal = (props: ModalProps) => {
   const { modalDataUrl, handleOK, handleCancel, hidModal } = props;
-  const baseUrl = 'https://public-api-v2.aspirantzhang.com';
-  const initUrl = baseUrl + modalDataUrl + '?X-API-KEY=antd';
+  const initUrl = modalDataUrl;
   const [form] = useForm();
   const {
     data,
@@ -41,7 +39,7 @@ export const Modal = (props: ModalProps) => {
     (config: RequestParams) => {
       const { uri, method, ...formData } = config;
       return {
-        url: baseUrl + uri,
+        url: uri,
         method,
         data: formData,
       };
@@ -69,7 +67,7 @@ export const Modal = (props: ModalProps) => {
   }, [props.visible, run, form]);
   //表单提交
   const onFinish = (values: RequestParams) => {
-    request.run(finishFormAdaptor(values, { 'X-API-KEY': 'antd' }));
+    request.run(finishFormAdaptor(values));
   };
 
   const actionHandler = (actionInfo: BasicPageDataApi.Action) => {
