@@ -67,6 +67,7 @@ declare module BasicPageDataApi {
     update_time: string;
     status: number;
     groups: Group[];
+    name?: string;
   };
 
   type Meta = {

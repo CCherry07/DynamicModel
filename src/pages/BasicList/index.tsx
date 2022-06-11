@@ -122,15 +122,16 @@ export default () => {
     row: BasicPageDataApi.DataSource,
     actionInfo: BasicPageDataApi.Action,
   ) => {
+    const rowName = row.name || row.username;
     AntdModal.confirm({
       title: (
         <Mark
           keywordSize="1.5rem"
-          target={`确定要删除<${row.username}>管理员吗？`}
-          keyword={`<${row.username}>`}
+          target={`确定要删除<${rowName}>管理员吗？`}
+          keyword={`<${rowName}>`}
         />
       ),
-      content: `点击确定删除 <${row.username}>`,
+      content: `点击确定删除 <${rowName}>`,
       okText: '确定',
       cancelText: '取消',
       onOk() {
