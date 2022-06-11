@@ -1,5 +1,6 @@
 import type { Settings as LayoutSettings } from '@ant-design/pro-layout';
 import { SettingDrawer } from '@ant-design/pro-layout';
+import type { MenuDataItem } from '@ant-design/pro-layout/lib';
 import { PageLoading } from '@ant-design/pro-layout';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
@@ -28,11 +29,12 @@ export async function getInitialState(): Promise<{
   currentMenu?: any;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  fetchMenu?: () => Promise<MenuDataItem[] | undefined>;
 }> {
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
-      return msg.data;
+      return msg;
     } catch (error) {
       history.push(loginPath);
     }
@@ -53,6 +55,7 @@ export async function getInitialState(): Promise<{
     const currentMenu = await fetchMenu();
     return {
       fetchUserInfo,
+      fetchMenu,
       currentUser,
       currentMenu,
       settings: defaultSettings,
@@ -60,6 +63,7 @@ export async function getInitialState(): Promise<{
   }
   return {
     fetchUserInfo,
+    fetchMenu,
     settings: defaultSettings,
   };
 }
@@ -84,6 +88,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     menuDataRender: () => {
       return initialState?.currentMenu;
     },
+    // 错误处理程序
     errorHandler: (error: ResponseError) => {
       switch (error.name) {
         case 'BizError':
