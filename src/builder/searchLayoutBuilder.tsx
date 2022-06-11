@@ -13,7 +13,7 @@ export const searchLayoutBuilder = (
     switch (field.type) {
       case 'text':
         return (
-          <Col sm={6}>
+          <Col sm={6} key={field.key}>
             <Form.Item key={field.key} label={field.title} name={field.key}>
               <Input disabled={field?.disabled} />
             </Form.Item>
@@ -21,7 +21,7 @@ export const searchLayoutBuilder = (
         );
       case 'datetime':
         return (
-          <Col sm={12}>
+          <Col sm={12} key={field.key}>
             <Form.Item key={field.key} label={field.title} name={field.key}>
               <DatePicker.RangePicker
                 style={{ width: '100%' }}
@@ -42,7 +42,7 @@ export const searchLayoutBuilder = (
         );
       case 'tree':
         return (
-          <Col sm={6}>
+          <Col sm={6} key={field.key}>
             <Form.Item key={field.key} label={field.title} name={field.key}>
               <TreeSelect treeCheckable disabled={field?.disabled} treeData={field.data} />
             </Form.Item>
@@ -51,11 +51,15 @@ export const searchLayoutBuilder = (
       case 'select':
       case 'switch':
         return (
-          <Col sm={6}>
+          <Col sm={6} key={field.key}>
             <Form.Item key={field.key} label={field.title} name={field.key}>
               <Select>
                 {(field.data || []).map((option) => {
-                  return <Select.Option value={option.value}>{option.title}</Select.Option>;
+                  return (
+                    <Select.Option value={option.value} key={option.value}>
+                      {option.title}
+                    </Select.Option>
+                  );
                 })}
               </Select>
             </Form.Item>
