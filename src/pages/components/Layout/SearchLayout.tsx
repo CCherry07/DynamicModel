@@ -39,8 +39,7 @@ export const SearchLayout = (props: SearchLayoutProps) => {
               <Space>
                 <Button onClick={clearHandle}> clear </Button>
                 <Button type="primary" htmlType="submit">
-                  {' '}
-                  submit{' '}
+                  submit
                 </Button>
               </Space>
             </Col>
