@@ -118,7 +118,7 @@ export default () => {
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
-  const confirmDeleteAdmin = (
+  const confirmDeleteRow = (
     row: BasicPageDataApi.DataSource,
     actionInfo: BasicPageDataApi.Action,
   ) => {
@@ -166,7 +166,7 @@ export default () => {
           setTableVisible(true);
           return;
         }
-        confirmDeleteAdmin(row, actionInfo);
+        confirmDeleteRow(row, actionInfo);
         break;
       case 'page':
         const pageEdituri =
