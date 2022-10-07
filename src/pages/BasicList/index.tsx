@@ -15,6 +15,7 @@ import { SearchLayout } from '../components/Layout/SearchLayout';
 import { Modal } from '@/components/Modal';
 import { Mark } from '@/components/Mark';
 import { TableModal } from '@/components/TableModal';
+import { usePageConfig } from './hooks';
 
 export interface PageConfig {
   page: number;
@@ -24,14 +25,15 @@ export interface PageConfig {
 }
 
 export default () => {
-  const [pageConfig, setPageConfig] = useState<PageConfig>({
+  const [isAsc, changeIsAsc] = useState(false);
+  const location = useLocation();
+  const [pageConfig, setPageConfig] = usePageConfig({
+    pathName: location.pathname,
     page: 1,
     per_page: 10,
     sort: 'id',
     order: 'asc',
   });
-  const [isAsc, changeIsAsc] = useState(false);
-  const location = useLocation();
   const url = `${location.pathname.replace('/basic-list', '')}?page=${pageConfig.page}
               &per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}
               &order=${pageConfig?.order}`;
@@ -112,9 +114,9 @@ export default () => {
     setVisible(true);
   }, [modalDataUrl]);
 
-  useEffect(() => {
-    // todo search
-  }, [isSearch]);
+  // useEffect(() => {
+  //   // todo search
+  // }, [isSearch]);
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
