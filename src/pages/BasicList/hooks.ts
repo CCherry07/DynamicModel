@@ -17,12 +17,14 @@ export const usePageConfig = (
     if (pathMap.has(pathName)) {
       setPageConfig(pathMap.get(pathName));
     } else {
+      // pathMap.set(pathName, defaultConfig)
       setPathMap((map) => {
         return map.set(pathName, defaultConfig);
       });
     }
   }, [pathName]);
   useEffect(() => {
+    // pathMap.set(pathName, pageConfig)
     setPathMap((map) => {
       return map.set(pathName, pageConfig);
     });
