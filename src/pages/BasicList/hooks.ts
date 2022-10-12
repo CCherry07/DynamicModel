@@ -22,7 +22,7 @@ export const usePageConfig = (
         return map.set(pathName, defaultConfig);
       });
     }
-  }, [pathName]);
+  }, [pathName, defaultConfig]);
   useEffect(() => {
     // pathMap.set(pathName, pageConfig)
     setPathMap((map) => {
