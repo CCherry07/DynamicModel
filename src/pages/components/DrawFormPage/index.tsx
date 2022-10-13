@@ -87,7 +87,7 @@ export default () => {
       ) : (
         <div>
           <Row gutter={24}>
-            <Col sm={16}>
+            <Col sm={16} key={1}>
               <Card>
                 <Tabs type="card">
                   {data?.layout.tabs.map((tab) => {
@@ -113,7 +113,7 @@ export default () => {
                 </Tabs>
               </Card>
             </Col>
-            <Col sm={8}>
+            <Col sm={8} key={2}>
               <Card style={{ textAlign: 'center' }}>
                 {data?.layout.actions.map((action) => {
                   return (
