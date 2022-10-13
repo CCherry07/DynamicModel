@@ -45,7 +45,7 @@ export default () => {
   const [tableVisible, setTableVisible] = useState(false);
   const [isSearch, setIsSearch] = useToggle(false);
   const { data, loading, run } = useRequest<{ data: BasicPageDataApi.ListData }>(
-    (config) => {
+    (config: any) => {
       return {
         url,
         params: config,
@@ -113,10 +113,6 @@ export default () => {
     if (!modalDataUrl) return;
     setVisible(true);
   }, [modalDataUrl]);
-
-  // useEffect(() => {
-  //   // todo search
-  // }, [isSearch]);
 
   const handlePageConfig = (page: number, pageSize: number) =>
     setPageConfig({ page, per_page: pageSize });
