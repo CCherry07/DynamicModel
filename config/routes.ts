@@ -53,7 +53,12 @@
     path: '/basic-list/*',
     component: './BasicList',
   },
-
+  {
+    name: 'modal-design',
+    icon: 'table',
+    path: '/modal-design',
+    component: './ModalDesgin',
+  },
   {
     path: '/',
     redirect: '/welcome',
