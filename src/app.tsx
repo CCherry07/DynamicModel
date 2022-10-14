@@ -85,9 +85,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       }
     },
     menuHeaderRender: undefined,
-    menuDataRender: () => {
-      return initialState?.currentMenu;
-    },
+
+    //后端给的菜单
+    // menuDataRender: () => {
+    //   return initialState?.currentMenu;
+    // },
     // 错误处理程序
     errorHandler: (error: ResponseError) => {
       switch (error.name) {
