@@ -34,7 +34,8 @@ export default () => {
     sort: 'id',
     order: 'asc',
   });
-  const url = `${location.pathname.replace('/basic-list', '')}?page=${pageConfig.page}
+
+  const url = `${location.pathname.replace('/basic-list/*', '')}/api/admins?page=${pageConfig.page}
               &per_page=${pageConfig.per_page}&sort=${pageConfig?.sort}
               &order=${pageConfig?.order}`;
   const [modalDataUrl, setModalDataUrl] = useState('');
